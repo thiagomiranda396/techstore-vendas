@@ -1,0 +1,57 @@
+# Publica a demonstração estática do dashboard (pasta web/) no GitHub Pages.
+# Só os arquivos de web/ são enviados: nenhuma API, banco ou configuração local.
+# Na hospedagem pública o dashboard roda sempre em modo de demonstração
+# (web/js/config.js), com os dados fictícios de web/dados-demo/demo.json.
+
+name: Publicar dashboard (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacao.outputs.page_url }}
+    steps:
+      - name: Obter o código
+        uses: actions/checkout@v4
+
+      - name: Conferir o conteúdo publicado
+        run: |
+          test -f web/index.html
+          test -f web/dados-demo/demo.json
+          # Nada além de arquivos estáticos e nenhum dado pessoal no JSON da demonstração.
+          if find web -type f \( -name "*.py" -o -name "*.env" -o -name ".env*" -o -name "*.pbix" -o -name "*.sql" \) | grep -q .; then
+            echo "Arquivo não estático em web/"; exit 1
+          fi
+          if grep -Eiq "cpf|e-?mail|telefone|salario" web/dados-demo/demo.json; then
+            echo "Possível dado pessoal em demo.json"; exit 1
+          fi
+
+      - name: Configurar o Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empacotar web/
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+      - name: Publicar
+        id: publicacao
+        uses: actions/deploy-pages@v4
