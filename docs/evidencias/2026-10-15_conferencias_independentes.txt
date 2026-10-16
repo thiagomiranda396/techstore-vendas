@@ -1,0 +1,114 @@
+# Conferências independentes (sessão somente leitura) - banco techstore_dev
+# Instância: PostgreSQL 18, porta 5433 (cluster techstore_dev18), banco techstore_dev (1ª validação, antes das views da camada estrela)
+# Usuário: techstore_dev_app (sem senha; SSPI local). Gerado em 2026-10-15.
+
+== Restricoes por tipo (p=PK f=FK u=UNIQUE c=CHECK)
+ contype | count 
+---------+-------
+ c       |    12
+ f       |     7
+ n       |    39
+ p       |     8
+ u       |     4
+
+== Chaves estrangeiras
+         conname         |    tabela    | referencia |                           definicao                           
+-------------------------+--------------+------------+---------------------------------------------------------------
+ fk_endereco_cliente     | endereco     | cliente    | FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+ fk_itens_pedido_pedido  | itens_pedido | pedido     | FOREIGN KEY (id_pedido) REFERENCES pedido(id_pedido)
+ fk_itens_pedido_produto | itens_pedido | produto    | FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+ fk_pedido_cliente       | pedido       | cliente    | FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+ fk_pedido_vendedor      | pedido       | vendedor   | FOREIGN KEY (id_vendedor) REFERENCES vendedor(id_vendedor)
+ fk_produto_categoria    | produto      | categoria  | FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+ fk_telefone_cliente     | telefone     | cliente    | FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+
+== Orfaos (todos devem ser 0)
+        rel         | count 
+--------------------+-------
+ endereco->cliente  |     0
+ telefone->cliente  |     0
+ produto->categoria |     0
+ pedido->cliente    |     0
+ pedido->vendedor   |     0
+ itens->pedido      |     0
+ itens->produto     |     0
+
+== Indices
+             indice             |    tabela    | unico | pk 
+--------------------------------+--------------+-------+----
+ pk_cliente                     | cliente      | t     | t
+ uq_cliente_cpf                 | cliente      | t     | f
+ uq_cliente_email               | cliente      | t     | f
+ pk_endereco                    | endereco     | t     | t
+ ix_endereco_id_cliente         | endereco     | f     | f
+ pk_telefone                    | telefone     | t     | t
+ ix_telefone_id_cliente         | telefone     | f     | f
+ pk_vendedor                    | vendedor     | t     | t
+ uq_vendedor_email              | vendedor     | t     | f
+ pk_categoria                   | categoria    | t     | t
+ pk_produto                     | produto      | t     | t
+ ix_produto_id_categoria        | produto      | f     | f
+ pk_pedido                      | pedido       | t     | t
+ ix_pedido_id_cliente           | pedido       | f     | f
+ ix_pedido_id_vendedor          | pedido       | f     | f
+ pk_itens_pedido                | itens_pedido | t     | t
+ uq_itens_pedido_pedido_produto | itens_pedido | t     | f
+ ix_itens_pedido_id_produto     | itens_pedido | f     | f
+
+== Contrato da vw_vendas
+ pos |  column_name   |     data_type     
+-----+----------------+-------------------
+   1 | pedido         | integer
+   2 | cliente        | character varying
+   3 | vendedor       | character varying
+   4 | produto        | character varying
+   5 | categoria      | character varying
+   6 | qtd            | integer
+   7 | preco_unitario | numeric
+   8 | faturamento    | numeric
+   9 | data_pedido    | date
+  10 | custo_unitario | numeric
+  11 | custo_total    | numeric
+  12 | id_cliente     | integer
+  13 | id_vendedor    | integer
+  14 | id_produto     | integer
+  15 | id_categoria   | integer
+
+== Custos carregados
+ id_produto |             nome              |  preco  |  custo  | custo_origem |                        custo_fonte                        
+------------+-------------------------------+---------+---------+--------------+-----------------------------------------------------------
+          1 | Notebook Dell Inspiron 15     | 4299.90 | 3400.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          2 | Notebook Lenovo IdeaPad 3     | 3499.90 | 2750.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          3 | Desktop Dell OptiPlex         | 3899.00 | 3050.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          4 | Mouse Logitech G502           |  399.90 |  300.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          5 | Teclado Mecânico Redragon     |  299.90 |  220.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          6 | Headset HyperX Cloud II       |  449.90 |  330.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          7 | Webcam Logitech C920          |  499.90 |  370.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          8 | Monitor LG UltraWide 29       | 1499.90 | 1150.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+          9 | Monitor Samsung 24 Full HD    |  899.90 |  680.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         10 | Monitor Dell 27 QHD           | 2199.90 | 1700.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         11 | Smartphone Samsung Galaxy A55 | 1999.90 | 1550.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         12 | Tablet Samsung Galaxy Tab     | 1899.90 | 1450.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         13 | Smart TV LG 50 Polegadas      | 2799.90 | 2200.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         14 | Suporte para Notebook         |  129.90 |   85.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         15 | Hub USB-C 7 em 1              |  189.90 |  130.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         16 | Mousepad Gamer Grande         |   89.90 |   55.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         17 | SSD Kingston 1TB              |  499.90 |  370.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         18 | SSD Samsung 2TB               |  899.90 |  680.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+         19 | Pen Drive Kingston 128GB      |   79.90 |   48.00 | REAL         | db_analise_vendas.public.produto, conferido em 2026-10-14
+
+== Comentarios gravados
+                                                                                               comentario_view                                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Fato de vendas por item (1 linha por item de pedido). Contrato com o Power BI: 15 colunas fixas. CUSTO_UNITARIO/CUSTO_TOTAL vêm do custo real atual de PRODUTO (db_analise_vendas, conferido em 2026-10-14).
+
+== Integridade temporal adicional
+ pedidos_futuros | cadastros_futuros 
+-----------------+-------------------
+               0 |                 0
+
+== Itens com preco diferente do preco de tabela
+ itens_preco_diferente 
+-----------------------
+                     0
+

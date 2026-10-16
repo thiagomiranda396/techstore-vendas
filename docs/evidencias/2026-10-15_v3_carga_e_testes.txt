@@ -1,0 +1,205 @@
+# Saída de psql -f database/00_executar_tudo.sql
+# Instância: PostgreSQL 18, porta 5433 (cluster techstore_dev18), banco techstore_dev_v3
+# Usuário: techstore_dev_app (sem senha; SSPI local). Gerado em 2026-10-15.
+
+SET
+DO
+SET
+BEGIN
+>> 01 - Estrutura
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COMMENT
+COMMENT
+COMMENT
+COMMENT
+>> 02 - Restrições e índices
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+>> 03 - Dados base (fictícios de exemplo)
+DO
+INSERT 0 10
+INSERT 0 30
+INSERT 0 10
+INSERT 0 13
+INSERT 0 5
+INSERT 0 6
+INSERT 0 19
+INSERT 0 15
+INSERT 0 35
+DO
+>> 04 - Dados gerados (fictícios de exemplo)
+DO
+INSERT 0 135
+DO
+>> 05 - Carga de custos
+CREATE TABLE
+INSERT 0 19
+scripts (mantido o dos scripts).
+ 
+DO
+database/05_custos_carga.sql:165: NOTA:  Custos REAIS carregados: 19 de 19 produtos.
+UPDATE 170
+DO
+ALTER TABLE
+>> 06 - Views
+CREATE VIEW
+COMMENT
+CREATE VIEW
+COMMENT
+CREATE VIEW
+COMMENT
+CREATE VIEW
+COMMENT
+CREATE VIEW
+COMMENT
+CREATE VIEW
+COMMENT
+>> 08 - Verificações de qualidade
+CREATE TABLE
+INSERT 0 8
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 7
+INSERT 0 8
+INSERT 0 1
+INSERT 0 1
+INSERT 0 4
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 4
+INSERT 0 19
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+ ordem |    grupo    |                              teste                               |          esperado           |               obtido                | status 
+-------+-------------+------------------------------------------------------------------+-----------------------------+-------------------------------------+--------
+     1 | IDS         | Linhas em CLIENTE                                                | 40                          | 40                                  | OK
+     2 | IDS         | Linhas em ENDERECO                                               | 10                          | 10                                  | OK
+     3 | IDS         | Linhas em TELEFONE                                               | 13                          | 13                                  | OK
+     4 | IDS         | Linhas em VENDEDOR                                               | 5                           | 5                                   | OK
+     5 | IDS         | Linhas em CATEGORIA                                              | 6                           | 6                                   | OK
+     6 | IDS         | Linhas em PRODUTO                                                | 19                          | 19                                  | OK
+     7 | IDS         | Linhas em PEDIDO                                                 | 60                          | 60                                  | OK
+     8 | IDS         | Linhas em ITENS_PEDIDO                                           | 170                         | 170                                 | OK
+     9 | IDS         | IDs de pedido contínuos (mín-máx / total)                        | 1-60 / 60                   | 1-60 / 60                           | OK
+    10 | IDS         | Pedidos sem itens                                                | 0                           | 0                                   | OK
+    11 | IDS         | Itens dos 15 pedidos manuais                                     | 35                          | 35                                  | OK
+    12 | IDS         | Pedidos gerados com quantidade de itens diferente de 3           | 0                           | 0                                   | OK
+    13 | IDS         | Produto repetido no mesmo pedido                                 | 0                           | 0                                   | OK
+    14 | DATAS       | Pedidos anteriores ao cadastro do cliente                        | 0                           | 0                                   | OK
+    15 | DATAS       | Pedidos anteriores à admissão do vendedor                        | 0                           | 0                                   | OK
+    16 | DATAS       | Período dos pedidos                                              | 2026-01-10 a 2026-08-18     | 2026-01-10 a 2026-08-18             | OK
+    17 | DATAS       | Clientes com ao menos 1 pedido                                   | 40                          | 40                                  | OK
+    18 | DATAS       | Clientes com 2 ou mais pedidos                                   | 15                          | 15                                  | OK
+    19 | DATAS       | Pedidos por vendedor (IDs 1/2/3/4/5)                             | 13/12/11/12/12              | 13/12/11/12/12                      | OK
+    20 | FATURAMENTO | Faturamento total                                                | 335062.30                   | 335062.30                           | OK
+    21 | FATURAMENTO | Faturamento dos pedidos manuais (1-15)                           | 50044.00                    | 50044.00                            | OK
+    22 | FATURAMENTO | Faturamento dos pedidos gerados (16-60)                          | 285018.30                   | 285018.30                           | OK
+    23 | FATURAMENTO | Unidades vendidas                                                | 260                         | 260                                 | OK
+    24 | FATURAMENTO | Soma dos preços do catálogo                                      | 26537.20                    | 26537.20                            | OK
+    25 | FATURAMENTO | Soma do estoque                                                  | 367                         | 367                                 | OK
+    26 | FATURAMENTO | Soma dos salários                                                | 21000.00                    | 21000.00                            | OK
+    27 | FATURAMENTO | Faturamento de 2026-01                                           | 33115.90                    | 33115.90                            | OK
+    28 | FATURAMENTO | Faturamento de 2026-02                                           | 30866.60                    | 30866.60                            | OK
+    29 | FATURAMENTO | Faturamento de 2026-03                                           | 39856.80                    | 39856.80                            | OK
+    30 | FATURAMENTO | Faturamento de 2026-04                                           | 63511.10                    | 63511.10                            | OK
+    31 | FATURAMENTO | Faturamento de 2026-05                                           | 64142.30                    | 64142.30                            | OK
+    32 | FATURAMENTO | Faturamento de 2026-06                                           | 41367.10                    | 41367.10                            | OK
+    33 | FATURAMENTO | Faturamento de 2026-07                                           | 40434.40                    | 40434.40                            | OK
+    34 | FATURAMENTO | Faturamento de 2026-08                                           | 21768.10                    | 21768.10                            | OK
+    35 | CUSTOS      | Produtos com custo de origem REAL                                | 19/19                       | 19/19                               | OK
+    36 | CUSTOS      | Custos divergentes da referência conferida (ID e valor)          | 0                           | 0                                   | OK
+    37 | CUSTOS      | Soma dos custos do catálogo                                      | 20518.00                    | 20518.00                            | OK
+    38 | CUSTOS      | Custo total das vendas                                           | 258699.00                   | 258699.00                           | OK
+    39 | CUSTOS      | Lucro bruto                                                      | 76363.30                    | 76363.30                            | OK
+    40 | CUSTOS      | Margem bruta % (2 casas)                                         | 22.79                       | 22.79                               | OK
+    41 | POWER BI    | View public.vw_vendas existe                                     | 1                           | 1                                   | OK
+    42 | POWER BI    | Colunas da vw_vendas divergentes do contrato (nome/posição/tipo) | 0                           | 0                                   | OK
+    43 | POWER BI    | Linhas da vw_vendas (1 por item)                                 | 170                         | 170                                 | OK
+    44 | POWER BI    | Faturamento da vw_vendas igual ao de ITENS_PEDIDO                | 335062.30                   | 335062.30                           | OK
+    45 | POWER BI    | Linhas da vw_vendas com custo_total <> qtd * custo_unitario      | 0                           | 0                                   | OK
+    46 | POWER BI    | Linhas da vw_vendas sem custo                                    | 0                           | 0                                   | OK
+    47 | POWER BI    | Soma de custo_total na vw_vendas                                 | 258699.00                   | 258699.00                           | OK
+    48 | CUSTO HIST. | Itens sem custo histórico                                        | 0                           | 0                                   | OK
+    49 | CUSTO HIST. | Custo total pelo custo histórico dos itens                       | 258699.00                   | 258699.00                           | OK
+    50 | CUSTO HIST. | Itens com custo histórico diferente do custo atual do produto    | 0                           | 0                                   | OK
+    51 | CUSTO HIST. | CUSTO_UNITARIO de ITENS_PEDIDO é NOT NULL (1 = sim)              | 1                           | 1                                   | OK
+    52 | ESTRELA     | vw_fato_vendas: linhas                                           | 170                         | 170                                 | OK
+    53 | ESTRELA     | vw_fato_vendas: faturamento                                      | 335062.30                   | 335062.30                           | OK
+    54 | ESTRELA     | vw_fato_vendas: custo total                                      | 258699.00                   | 258699.00                           | OK
+    55 | ESTRELA     | vw_fato_vendas: lucro bruto                                      | 76363.30                    | 76363.30                            | OK
+    56 | ESTRELA     | vw_fato_vendas x vw_vendas: diferença de faturamento             | 0                           | 0.00                                | OK
+    57 | ESTRELA     | vw_dim_cliente: linhas (1 por cliente)                           | 40                          | 40                                  | OK
+    58 | ESTRELA     | vw_dim_cliente: chaves duplicadas                                | 0                           | 0                                   | OK
+    59 | ESTRELA     | vw_dim_cliente: rótulos de exibição duplicados                   | 0                           | 0                                   | OK
+    60 | ESTRELA     | vw_dim_produto: linhas                                           | 19                          | 19                                  | OK
+    61 | ESTRELA     | vw_dim_produto: chaves duplicadas                                | 0                           | 0                                   | OK
+    62 | ESTRELA     | vw_dim_vendedor: linhas                                          | 5                           | 5                                   | OK
+    63 | ESTRELA     | vw_dim_calendario: dias (2025 e 2026)                            | 730                         | 730                                 | OK
+    64 | ESTRELA     | Clientes com cadastro fora do calendário                         | 0                           | 0                                   | OK
+    65 | ESTRELA     | vw_dim_calendario: datas duplicadas                              | 0                           | 0                                   | OK
+    66 | ESTRELA     | Fato sem cliente na dimensão                                     | 0                           | 0                                   | OK
+    67 | ESTRELA     | Fato sem produto na dimensão                                     | 0                           | 0                                   | OK
+    68 | ESTRELA     | Fato sem vendedor na dimensão                                    | 0                           | 0                                   | OK
+    69 | ESTRELA     | Fato sem data no calendário                                      | 0                           | 0                                   | OK
+    70 | ESTRELA     | Meses com situação "Parcial"                                     | 1                           | 1                                   | OK
+    71 | ESTRELA     | Colunas com dados pessoais nas views vw_fato_*/vw_dim_*          | 0                           | 0                                   | OK
+    72 | AVISO       | Nomes de clientes homônimos (identificar sempre por ID)          | 2 (conhecidos)              | 2 -> Daniel Oliveira, Lucas Pereira | AVISO
+    73 | AVISO       | Produtos com custo maior ou igual ao preço                       | 0                           | 0                                   | OK
+    74 | AVISO       | Último mês com dados completo                                    | último pedido no fim do mês | último pedido em 2026-08-18         | AVISO
+(74 linhas)
+
+DO
+database/08_verificacoes_qualidade.sql:629: NOTA:  Todos os testes bloqueantes passaram.
+COMMIT
+>> Carga concluída e validada.

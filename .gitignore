@@ -1,0 +1,61 @@
+# =============================================================================
+# TechstoreVendas | .gitignore
+# =============================================================================
+
+# --- Credenciais e configuração local -----------------------------------------
+.env
+.env.*
+*.pgpass
+.pgpass
+pgpass.conf
+*.pem
+*.key
+*.pfx
+credenciais*
+secrets*
+
+# --- Dados sensíveis e exportações --------------------------------------------
+# Exportações de custos reais (docs/PROCEDIMENTO_DESCOBERTA_CUSTOS.md)
+custos_reais*.csv
+exportacoes/
+dados_sensiveis/
+
+# Dumps e backups de banco (podem conter dados completos)
+*.dump
+*.backup
+*.bak
+*.sql.gz
+
+# --- Power BI ------------------------------------------------------------------
+# Arquivos .pbix não são publicados: contêm identificadores do Power BI Service,
+# um bloco de credenciais criptografado (SecurityBindings) e um modelo binário
+# não auditável. O original (powerbi/TECHSTORE_VENDAS.pbix) fica só no histórico
+# LOCAL (commit inicial); o branch publicado é gerado sem ele por
+# scripts/gerar_branch_publicacao.ps1.
+powerbi/*.pbix
+*_copia*.pbix
+*.pbix.tmp
+# Arquivos locais de um futuro Power BI Project (.pbip)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# --- Python (API do dashboard web) -------------------------------------------
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+# api/.env (credenciais) é coberto por ".env" acima. O modelo sem valores é versionado:
+!.env.exemplo
+
+# --- Temporários e sistema operacional ----------------------------------------
+*.tmp
+*.log
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# --- Editores -------------------------------------------------------------------
+.vscode/
+.idea/

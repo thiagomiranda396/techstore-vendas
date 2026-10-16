@@ -1,0 +1,699 @@
+# Saída de psql -f database/07_consultas_analiticas.sql (sessão somente leitura)
+# Instância: PostgreSQL 18, porta 5433 (cluster techstore_dev18), banco techstore_dev_v3
+# Usuário: techstore_dev_app (sem senha; SSPI local). Gerado em 2026-10-15.
+
+ id_categoria |   categoria   | total_produtos 
+--------------+---------------+----------------
+            2 | Periféricos   |              4
+            3 | Monitores     |              3
+            5 | Acessórios    |              3
+            4 | Eletrônicos   |              3
+            6 | Armazenamento |              3
+            1 | Informática   |              3
+(6 linhas)
+
+ id_categoria |   categoria   | total_produtos | preco_medio 
+--------------+---------------+----------------+-------------
+            1 | Informática   |              3 |     3899.60
+            4 | Eletrônicos   |              3 |     2233.23
+            3 | Monitores     |              3 |     1533.23
+            6 | Armazenamento |              3 |      493.23
+            2 | Periféricos   |              4 |      412.40
+            5 | Acessórios    |              3 |      136.57
+(6 linhas)
+
+ id_cliente |      cliente       | total_pedidos 
+------------+--------------------+---------------
+          5 | Daniel Oliveira    |             3
+          3 | Bruno Almeida      |             3
+          7 | Gabriel Santos     |             3
+          2 | Ana Carolina Souza |             3
+          1 | Thiago Miranda     |             3
+          8 | Juliana Martins    |             2
+          4 | Camila Ferreira    |             2
+         10 | Mariana Rocha      |             2
+          6 | Fernanda Costa     |             2
+         14 | Bruno Carvalho     |             2
+         13 | Beatriz Almeida    |             2
+         11 | Amanda Ferreira    |             2
+          9 | Lucas Pereira      |             2
+         15 | Camila Rocha       |             2
+         12 | André Martins      |             2
+         40 | Vinicius Carvalho  |             1
+         32 | Natalia Freitas    |             1
+         27 | Leonardo Souza     |             1
+         36 | Ricardo Nunes      |             1
+         38 | Thiago Ribeiro     |             1
+         23 | Igor Mendes        |             1
+         26 | Julia Rodrigues    |             1
+         29 | Lucas Pereira      |             1
+         24 | Isabela Castro     |             1
+         19 | Felipe Gomes       |             1
+         25 | João Almeida       |             1
+         30 | Mariana Alves      |             1
+         21 | Gustavo Ribeiro    |             1
+         39 | Vanessa Oliveira   |             1
+         17 | Eduardo Costa      |             1
+         37 | Sabrina Costa      |             1
+         28 | Larissa Mendes     |             1
+         20 | Gabriela Santos    |             1
+         33 | Pedro Henrique     |             1
+         35 | Renata Martins     |             1
+         22 | Helena Barbosa     |             1
+         34 | Rafael Gomes       |             1
+         31 | Matheus Silva      |             1
+         16 | Daniel Oliveira    |             1
+         18 | Fernanda Lima      |             1
+(40 linhas)
+
+ id_vendedor |     vendedor      | id_cliente |      cliente       | total_pedidos 
+-------------+-------------------+------------+--------------------+---------------
+           2 | Juliana Mendes    |          3 | Bruno Almeida      |             2
+           1 | Carlos Henrique   |         11 | Amanda Ferreira    |             2
+           5 | Marcelo Santos    |         15 | Camila Rocha       |             2
+           4 | Patricia Oliveira |          9 | Lucas Pereira      |             2
+           3 | Rafael Martins    |         13 | Beatriz Almeida    |             2
+           4 | Patricia Oliveira |         14 | Bruno Carvalho     |             2
+           5 | Marcelo Santos    |         10 | Mariana Rocha      |             2
+           2 | Juliana Mendes    |         12 | André Martins      |             2
+           5 | Marcelo Santos    |          6 | Fernanda Costa     |             1
+           5 | Marcelo Santos    |         25 | João Almeida       |             1
+           3 | Rafael Martins    |         23 | Igor Mendes        |             1
+           4 | Patricia Oliveira |          1 | Thiago Miranda     |             1
+           3 | Rafael Martins    |         40 | Vinicius Carvalho  |             1
+           1 | Carlos Henrique   |          5 | Daniel Oliveira    |             1
+           1 | Carlos Henrique   |         16 | Daniel Oliveira    |             1
+           1 | Carlos Henrique   |          3 | Bruno Almeida      |             1
+           3 | Rafael Martins    |         28 | Larissa Mendes     |             1
+           4 | Patricia Oliveira |          2 | Ana Carolina Souza |             1
+           5 | Marcelo Santos    |         20 | Gabriela Santos    |             1
+           2 | Juliana Mendes    |          2 | Ana Carolina Souza |             1
+           1 | Carlos Henrique   |         36 | Ricardo Nunes      |             1
+           3 | Rafael Martins    |         33 | Pedro Henrique     |             1
+           2 | Juliana Mendes    |         37 | Sabrina Costa      |             1
+           1 | Carlos Henrique   |         31 | Matheus Silva      |             1
+           4 | Patricia Oliveira |          5 | Daniel Oliveira    |             1
+           1 | Carlos Henrique   |         21 | Gustavo Ribeiro    |             1
+           4 | Patricia Oliveira |         24 | Isabela Castro     |             1
+           3 | Rafael Martins    |         18 | Fernanda Lima      |             1
+           1 | Carlos Henrique   |         26 | Julia Rodrigues    |             1
+           3 | Rafael Martins    |          7 | Gabriel Santos     |             1
+           2 | Juliana Mendes    |          1 | Thiago Miranda     |             1
+           5 | Marcelo Santos    |          5 | Daniel Oliveira    |             1
+           3 | Rafael Martins    |         38 | Thiago Ribeiro     |             1
+           2 | Juliana Mendes    |         22 | Helena Barbosa     |             1
+           3 | Rafael Martins    |          4 | Camila Ferreira    |             1
+           2 | Juliana Mendes    |         27 | Leonardo Souza     |             1
+           4 | Patricia Oliveira |         34 | Rafael Gomes       |             1
+           5 | Marcelo Santos    |          7 | Gabriel Santos     |             1
+           4 | Patricia Oliveira |         29 | Lucas Pereira      |             1
+           3 | Rafael Martins    |          8 | Juliana Martins    |             1
+           1 | Carlos Henrique   |         39 | Vanessa Oliveira   |             1
+           5 | Marcelo Santos    |         30 | Mariana Alves      |             1
+           1 | Carlos Henrique   |          6 | Fernanda Costa     |             1
+           1 | Carlos Henrique   |          8 | Juliana Martins    |             1
+           2 | Juliana Mendes    |          7 | Gabriel Santos     |             1
+           1 | Carlos Henrique   |          1 | Thiago Miranda     |             1
+           4 | Patricia Oliveira |          4 | Camila Ferreira    |             1
+           5 | Marcelo Santos    |         35 | Renata Martins     |             1
+           4 | Patricia Oliveira |         19 | Felipe Gomes       |             1
+           5 | Marcelo Santos    |          2 | Ana Carolina Souza |             1
+           2 | Juliana Mendes    |         32 | Natalia Freitas    |             1
+           2 | Juliana Mendes    |         17 | Eduardo Costa      |             1
+(52 linhas)
+
+ id_pedido | id_cliente |      cliente       | valor_total_pedido 
+-----------+------------+--------------------+--------------------
+        33 |         28 | Larissa Mendes     |           14897.70
+        29 |         24 | Isabela Castro     |           13379.40
+        45 |          2 | Ana Carolina Souza |           13049.50
+        17 |         12 | André Martins      |           12097.70
+        55 |         10 | Mariana Rocha      |           12097.70
+        39 |         34 | Rafael Gomes       |           11299.50
+        23 |         18 | Fernanda Lima      |           11179.40
+        44 |          1 | Thiago Miranda     |            9797.80
+        52 |          7 | Gabriel Santos     |            9698.70
+        18 |         13 | Beatriz Almeida    |            9429.50
+        56 |         11 | Amanda Ferreira    |            9239.60
+        60 |         15 | Camila Rocha       |            7999.60
+        22 |         17 | Eduardo Costa      |            7999.60
+        25 |         20 | Gabriela Santos    |            7898.60
+        41 |         36 | Ricardo Nunes      |            7599.50
+        50 |          5 | Daniel Oliveira    |            7589.60
+        49 |          4 | Camila Ferreira    |            7299.50
+        26 |         21 | Gustavo Ribeiro    |            7199.60
+        48 |         40 | Vinicius Carvalho  |            7069.50
+        36 |         31 | Matheus Silva      |            6798.70
+        58 |         13 | Beatriz Almeida    |            6399.60
+        20 |         15 | Camila Rocha       |            6399.60
+        42 |         37 | Sabrina Costa      |            5769.50
+        37 |         32 | Natalia Freitas    |            5769.40
+         1 |          1 | Thiago Miranda     |            5399.60
+        40 |         35 | Renata Martins     |            5079.50
+        30 |         25 | João Almeida       |            4999.60
+        51 |          6 | Fernanda Costa     |            4859.50
+        28 |         23 | Igor Mendes        |            4799.60
+        15 |          7 | Gabriel Santos     |            4798.90
+        31 |         26 | Julia Rodrigues    |            4769.40
+         9 |          8 | Juliana Martins    |            4689.70
+        34 |         29 | Lucas Pereira      |            4629.50
+         6 |          1 | Thiago Miranda     |            4528.80
+        13 |          5 | Daniel Oliveira    |            4399.80
+        19 |         14 | Bruno Carvalho     |            3999.50
+        57 |         12 | André Martins      |            3999.50
+         3 |          3 | Bruno Almeida      |            3949.80
+        47 |          3 | Bruno Almeida      |            3899.50
+        12 |          3 | Bruno Almeida      |            3699.80
+        59 |         14 | Bruno Carvalho     |            3369.40
+        53 |          8 | Juliana Martins    |            3169.40
+         7 |          6 | Fernanda Costa     |            3099.80
+         5 |          5 | Daniel Oliveira    |            2999.70
+        21 |         16 | Daniel Oliveira    |            2989.60
+         8 |          7 | Gabriel Santos     |            2959.70
+        32 |         27 | Leonardo Souza     |            2879.60
+        38 |         33 | Pedro Henrique     |            2599.60
+        14 |          2 | Ana Carolina Souza |            2499.40
+        46 |         39 | Vanessa Oliveira   |            2459.50
+        35 |         30 | Mariana Alves      |            2299.30
+        10 |          9 | Lucas Pereira      |            2089.80
+         4 |          4 | Camila Ferreira    |            1889.70
+        27 |         22 | Helena Barbosa     |            1829.60
+         2 |          2 | Ana Carolina Souza |            1689.80
+        54 |          9 | Lucas Pereira      |            1369.50
+        11 |         10 | Mariana Rocha      |            1349.70
+        16 |         11 | Amanda Ferreira    |            1189.60
+        43 |         38 | Thiago Ribeiro     |            1069.40
+        24 |         19 | Felipe Gomes       |             799.40
+(60 linhas)
+
+ id_cliente |      cliente       | total_gasto 
+------------+--------------------+-------------
+          1 | Thiago Miranda     |    19726.20
+          7 | Gabriel Santos     |    17457.30
+          2 | Ana Carolina Souza |    17238.70
+         12 | André Martins      |    16097.20
+         13 | Beatriz Almeida    |    15829.10
+          5 | Daniel Oliveira    |    14989.10
+         28 | Larissa Mendes     |    14897.70
+         15 | Camila Rocha       |    14399.20
+         10 | Mariana Rocha      |    13447.40
+         24 | Isabela Castro     |    13379.40
+          3 | Bruno Almeida      |    11549.10
+         34 | Rafael Gomes       |    11299.50
+         18 | Fernanda Lima      |    11179.40
+         11 | Amanda Ferreira    |    10429.20
+          4 | Camila Ferreira    |     9189.20
+         17 | Eduardo Costa      |     7999.60
+          6 | Fernanda Costa     |     7959.30
+         20 | Gabriela Santos    |     7898.60
+          8 | Juliana Martins    |     7859.10
+         36 | Ricardo Nunes      |     7599.50
+         14 | Bruno Carvalho     |     7368.90
+         21 | Gustavo Ribeiro    |     7199.60
+         40 | Vinicius Carvalho  |     7069.50
+         31 | Matheus Silva      |     6798.70
+         37 | Sabrina Costa      |     5769.50
+         32 | Natalia Freitas    |     5769.40
+         35 | Renata Martins     |     5079.50
+         25 | João Almeida       |     4999.60
+         23 | Igor Mendes        |     4799.60
+         26 | Julia Rodrigues    |     4769.40
+         29 | Lucas Pereira      |     4629.50
+          9 | Lucas Pereira      |     3459.30
+         16 | Daniel Oliveira    |     2989.60
+         27 | Leonardo Souza     |     2879.60
+         33 | Pedro Henrique     |     2599.60
+         39 | Vanessa Oliveira   |     2459.50
+         30 | Mariana Alves      |     2299.30
+         22 | Helena Barbosa     |     1829.60
+         38 | Thiago Ribeiro     |     1069.40
+         19 | Felipe Gomes       |      799.40
+(40 linhas)
+
+ id_produto |            produto            |   categoria   | quantidade_vendida | faturamento 
+------------+-------------------------------+---------------+--------------------+-------------
+          1 | Notebook Dell Inspiron 15     | Informática   |                 13 |    55898.70
+          3 | Desktop Dell OptiPlex         | Informática   |                 13 |    50687.00
+          2 | Notebook Lenovo IdeaPad 3     | Informática   |                 12 |    41998.80
+         13 | Smart TV LG 50 Polegadas      | Eletrônicos   |                 12 |    33598.80
+         10 | Monitor Dell 27 QHD           | Monitores     |                 12 |    26398.80
+         12 | Tablet Samsung Galaxy Tab     | Eletrônicos   |                 13 |    24698.70
+         11 | Smartphone Samsung Galaxy A55 | Eletrônicos   |                 11 |    21998.90
+          8 | Monitor LG UltraWide 29       | Monitores     |                 12 |    17998.80
+          9 | Monitor Samsung 24 Full HD    | Monitores     |                 15 |    13498.50
+         18 | SSD Samsung 2TB               | Armazenamento |                 14 |    12598.60
+          7 | Webcam Logitech C920          | Periféricos   |                 13 |     6498.70
+         17 | SSD Kingston 1TB              | Armazenamento |                 12 |     5998.80
+          6 | Headset HyperX Cloud II       | Periféricos   |                 12 |     5398.80
+          4 | Mouse Logitech G502           | Periféricos   |                 13 |     5198.70
+          5 | Teclado Mecânico Redragon     | Periféricos   |                 13 |     3898.70
+         15 | Hub USB-C 7 em 1              | Acessórios    |                 19 |     3608.10
+         14 | Suporte para Notebook         | Acessórios    |                 17 |     2208.30
+         16 | Mousepad Gamer Grande         | Acessórios    |                 16 |     1438.40
+         19 | Pen Drive Kingston 128GB      | Armazenamento |                 18 |     1438.20
+(19 linhas)
+
+ id_vendedor |     vendedor      | total_pedidos | itens_vendidos | faturamento 
+-------------+-------------------+---------------+----------------+-------------
+           5 | Marcelo Santos    |            12 |             50 |    76661.40
+           1 | Carlos Henrique   |            13 |             52 |    65543.90
+           3 | Rafael Martins    |            11 |             51 |    65463.10
+           2 | Juliana Mendes    |            12 |             49 |    63861.50
+           4 | Patricia Oliveira |            12 |             58 |    63532.40
+(5 linhas)
+
+ id_produto |            produto            | qtd_vendida | faturamento 
+------------+-------------------------------+-------------+-------------
+          1 | Notebook Dell Inspiron 15     |          13 |    55898.70
+          3 | Desktop Dell OptiPlex         |          13 |    50687.00
+          2 | Notebook Lenovo IdeaPad 3     |          12 |    41998.80
+         13 | Smart TV LG 50 Polegadas      |          12 |    33598.80
+         10 | Monitor Dell 27 QHD           |          12 |    26398.80
+         12 | Tablet Samsung Galaxy Tab     |          13 |    24698.70
+         11 | Smartphone Samsung Galaxy A55 |          11 |    21998.90
+          8 | Monitor LG UltraWide 29       |          12 |    17998.80
+          9 | Monitor Samsung 24 Full HD    |          15 |    13498.50
+         18 | SSD Samsung 2TB               |          14 |    12598.60
+          7 | Webcam Logitech C920          |          13 |     6498.70
+         17 | SSD Kingston 1TB              |          12 |     5998.80
+          6 | Headset HyperX Cloud II       |          12 |     5398.80
+          4 | Mouse Logitech G502           |          13 |     5198.70
+          5 | Teclado Mecânico Redragon     |          13 |     3898.70
+         15 | Hub USB-C 7 em 1              |          19 |     3608.10
+         14 | Suporte para Notebook         |          17 |     2208.30
+         16 | Mousepad Gamer Grande         |          16 |     1438.40
+         19 | Pen Drive Kingston 128GB      |          18 |     1438.20
+(19 linhas)
+
+ id_categoria |   categoria   | qtd_vendida | faturamento 
+--------------+---------------+-------------+-------------
+            1 | Informática   |          38 |   148584.50
+            4 | Eletrônicos   |          36 |    80296.40
+            3 | Monitores     |          39 |    57896.10
+            2 | Periféricos   |          51 |    20994.90
+            6 | Armazenamento |          44 |    20035.60
+            5 | Acessórios    |          52 |     7254.80
+(6 linhas)
+
+ id_pedido | valor_pedido 
+-----------+--------------
+        33 |     14897.70
+        29 |     13379.40
+        45 |     13049.50
+        17 |     12097.70
+        55 |     12097.70
+        39 |     11299.50
+        23 |     11179.40
+        44 |      9797.80
+        52 |      9698.70
+        18 |      9429.50
+        56 |      9239.60
+        22 |      7999.60
+        60 |      7999.60
+        25 |      7898.60
+        41 |      7599.50
+        50 |      7589.60
+        49 |      7299.50
+        26 |      7199.60
+        48 |      7069.50
+        36 |      6798.70
+        20 |      6399.60
+        58 |      6399.60
+        42 |      5769.50
+        37 |      5769.40
+         1 |      5399.60
+        40 |      5079.50
+        30 |      4999.60
+        51 |      4859.50
+        28 |      4799.60
+        15 |      4798.90
+        31 |      4769.40
+         9 |      4689.70
+        34 |      4629.50
+         6 |      4528.80
+        13 |      4399.80
+        19 |      3999.50
+        57 |      3999.50
+         3 |      3949.80
+        47 |      3899.50
+        12 |      3699.80
+        59 |      3369.40
+        53 |      3169.40
+         7 |      3099.80
+         5 |      2999.70
+        21 |      2989.60
+         8 |      2959.70
+        32 |      2879.60
+        38 |      2599.60
+        14 |      2499.40
+        46 |      2459.50
+        35 |      2299.30
+        10 |      2089.80
+         4 |      1889.70
+        27 |      1829.60
+         2 |      1689.80
+        54 |      1369.50
+        11 |      1349.70
+        16 |      1189.60
+        43 |      1069.40
+        24 |       799.40
+(60 linhas)
+
+ ticket_medio 
+--------------
+      5584.37
+(1 linha)
+
+ id_vendedor |     vendedor      | id_pedido | faturamento 
+-------------+-------------------+-----------+-------------
+           3 | Rafael Martins    |        33 |    14897.70
+           4 | Patricia Oliveira |        29 |    13379.40
+           5 | Marcelo Santos    |        45 |    13049.50
+           2 | Juliana Mendes    |        17 |    12097.70
+           5 | Marcelo Santos    |        55 |    12097.70
+           4 | Patricia Oliveira |        39 |    11299.50
+           3 | Rafael Martins    |        23 |    11179.40
+           4 | Patricia Oliveira |        44 |     9797.80
+           2 | Juliana Mendes    |        52 |     9698.70
+           3 | Rafael Martins    |        18 |     9429.50
+           1 | Carlos Henrique   |        56 |     9239.60
+           5 | Marcelo Santos    |        60 |     7999.60
+           2 | Juliana Mendes    |        22 |     7999.60
+           5 | Marcelo Santos    |        25 |     7898.60
+           1 | Carlos Henrique   |        41 |     7599.50
+           5 | Marcelo Santos    |        50 |     7589.60
+           4 | Patricia Oliveira |        49 |     7299.50
+           1 | Carlos Henrique   |        26 |     7199.60
+           3 | Rafael Martins    |        48 |     7069.50
+           1 | Carlos Henrique   |        36 |     6798.70
+           5 | Marcelo Santos    |        20 |     6399.60
+           3 | Rafael Martins    |        58 |     6399.60
+           2 | Juliana Mendes    |        42 |     5769.50
+           2 | Juliana Mendes    |        37 |     5769.40
+           1 | Carlos Henrique   |         1 |     5399.60
+           5 | Marcelo Santos    |        40 |     5079.50
+           5 | Marcelo Santos    |        30 |     4999.60
+           1 | Carlos Henrique   |        51 |     4859.50
+           3 | Rafael Martins    |        28 |     4799.60
+           5 | Marcelo Santos    |        15 |     4798.90
+           1 | Carlos Henrique   |        31 |     4769.40
+           1 | Carlos Henrique   |         9 |     4689.70
+           4 | Patricia Oliveira |        34 |     4629.50
+           2 | Juliana Mendes    |         6 |     4528.80
+           1 | Carlos Henrique   |        13 |     4399.80
+           2 | Juliana Mendes    |        57 |     3999.50
+           4 | Patricia Oliveira |        19 |     3999.50
+           1 | Carlos Henrique   |         3 |     3949.80
+           2 | Juliana Mendes    |        47 |     3899.50
+           2 | Juliana Mendes    |        12 |     3699.80
+           4 | Patricia Oliveira |        59 |     3369.40
+           3 | Rafael Martins    |        53 |     3169.40
+           5 | Marcelo Santos    |         7 |     3099.80
+           4 | Patricia Oliveira |         5 |     2999.70
+           1 | Carlos Henrique   |        21 |     2989.60
+           3 | Rafael Martins    |         8 |     2959.70
+           2 | Juliana Mendes    |        32 |     2879.60
+           3 | Rafael Martins    |        38 |     2599.60
+           4 | Patricia Oliveira |        14 |     2499.40
+           1 | Carlos Henrique   |        46 |     2459.50
+           5 | Marcelo Santos    |        35 |     2299.30
+           4 | Patricia Oliveira |        10 |     2089.80
+           3 | Rafael Martins    |         4 |     1889.70
+           2 | Juliana Mendes    |        27 |     1829.60
+           2 | Juliana Mendes    |         2 |     1689.80
+           4 | Patricia Oliveira |        54 |     1369.50
+           5 | Marcelo Santos    |        11 |     1349.70
+           1 | Carlos Henrique   |        16 |     1189.60
+           3 | Rafael Martins    |        43 |     1069.40
+           4 | Patricia Oliveira |        24 |      799.40
+(60 linhas)
+
+ id_vendedor |     vendedor      | total_pedidos | faturamento_total | ticket_medio | ranking 
+-------------+-------------------+---------------+-------------------+--------------+---------
+           5 | Marcelo Santos    |            12 |          76661.40 |      6388.45 |       1
+           1 | Carlos Henrique   |            13 |          65543.90 |      5041.84 |       2
+           3 | Rafael Martins    |            11 |          65463.10 |      5951.19 |       3
+           2 | Juliana Mendes    |            12 |          63861.50 |      5321.79 |       4
+           4 | Patricia Oliveira |            12 |          63532.40 |      5294.37 |       5
+(5 linhas)
+
+ pedido |      cliente       |     vendedor      |            produto            |   categoria   | qtd | preco_unitario | faturamento | data_pedido | custo_unitario | custo_total | id_cliente | id_vendedor | id_produto | id_categoria 
+--------+--------------------+-------------------+-------------------------------+---------------+-----+----------------+-------------+-------------+----------------+-------------+------------+-------------+------------+--------------
+     56 | Amanda Ferreira    | Carlos Henrique   | Notebook Dell Inspiron 15     | Informática   |   2 |        4299.90 |     8599.80 | 2026-07-29  |        3400.00 |     6800.00 |         11 |           1 |          1 |            1
+     48 | Vinicius Carvalho  | Rafael Martins    | Notebook Dell Inspiron 15     | Informática   |   1 |        4299.90 |     4299.90 | 2026-06-19  |        3400.00 |     3400.00 |         40 |           3 |          1 |            1
+     45 | Ana Carolina Souza | Marcelo Santos    | Notebook Dell Inspiron 15     | Informática   |   2 |        4299.90 |     8599.80 | 2026-06-04  |        3400.00 |     6800.00 |          2 |           5 |          1 |            1
+     37 | Natalia Freitas    | Juliana Mendes    | Notebook Dell Inspiron 15     | Informática   |   1 |        4299.90 |     4299.90 | 2026-04-25  |        3400.00 |     3400.00 |         32 |           2 |          1 |            1
+     29 | Isabela Castro     | Patricia Oliveira | Notebook Dell Inspiron 15     | Informática   |   2 |        4299.90 |     8599.80 | 2026-03-16  |        3400.00 |     6800.00 |         24 |           4 |          1 |            1
+     26 | Gustavo Ribeiro    | Carlos Henrique   | Notebook Dell Inspiron 15     | Informática   |   1 |        4299.90 |     4299.90 | 2026-03-01  |        3400.00 |     3400.00 |         21 |           1 |          1 |            1
+     18 | Beatriz Almeida    | Rafael Martins    | Notebook Dell Inspiron 15     | Informática   |   2 |        4299.90 |     8599.80 | 2026-01-20  |        3400.00 |     6800.00 |         13 |           3 |          1 |            1
+      9 | Juliana Martins    | Carlos Henrique   | Notebook Dell Inspiron 15     | Informática   |   1 |        4299.90 |     4299.90 | 2026-05-02  |        3400.00 |     3400.00 |          8 |           1 |          1 |            1
+      1 | Thiago Miranda     | Carlos Henrique   | Notebook Dell Inspiron 15     | Informática   |   1 |        4299.90 |     4299.90 | 2026-04-10  |        3400.00 |     3400.00 |          1 |           1 |          1 |            1
+     58 | Beatriz Almeida    | Rafael Martins    | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-08-08  |        2750.00 |     2750.00 |         13 |           3 |          2 |            1
+     50 | Daniel Oliveira    | Marcelo Santos    | Notebook Lenovo IdeaPad 3     | Informática   |   2 |        3499.90 |     6999.80 | 2026-06-29  |        2750.00 |     5500.00 |          5 |           5 |          2 |            1
+     42 | Sabrina Costa      | Juliana Mendes    | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-05-20  |        2750.00 |     2750.00 |         37 |           2 |          2 |            1
+     39 | Rafael Gomes       | Patricia Oliveira | Notebook Lenovo IdeaPad 3     | Informática   |   2 |        3499.90 |     6999.80 | 2026-05-05  |        2750.00 |     5500.00 |         34 |           4 |          2 |            1
+     31 | Julia Rodrigues    | Carlos Henrique   | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-03-26  |        2750.00 |     2750.00 |         26 |           1 |          2 |            1
+     23 | Fernanda Lima      | Rafael Martins    | Notebook Lenovo IdeaPad 3     | Informática   |   2 |        3499.90 |     6999.80 | 2026-02-14  |        2750.00 |     5500.00 |         18 |           3 |          2 |            1
+     20 | Camila Rocha       | Marcelo Santos    | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-01-30  |        2750.00 |     2750.00 |         15 |           5 |          2 |            1
+     13 | Daniel Oliveira    | Carlos Henrique   | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-05-15  |        2750.00 |     2750.00 |          5 |           1 |          2 |            1
+      3 | Bruno Almeida      | Carlos Henrique   | Notebook Lenovo IdeaPad 3     | Informática   |   1 |        3499.90 |     3499.90 | 2026-04-15  |        2750.00 |     2750.00 |          3 |           1 |          2 |            1
+     55 | Mariana Rocha      | Marcelo Santos    | Desktop Dell OptiPlex         | Informática   |   2 |        3899.00 |     7798.00 | 2026-07-24  |        3050.00 |     6100.00 |         10 |           5 |          3 |            1
+     52 | Gabriel Santos     | Juliana Mendes    | Desktop Dell OptiPlex         | Informática   |   1 |        3899.00 |     3899.00 | 2026-07-09  |        3050.00 |     3050.00 |          7 |           2 |          3 |            1
+     44 | Thiago Miranda     | Patricia Oliveira | Desktop Dell OptiPlex         | Informática   |   2 |        3899.00 |     7798.00 | 2026-05-30  |        3050.00 |     6100.00 |          1 |           4 |          3 |            1
+     36 | Matheus Silva      | Carlos Henrique   | Desktop Dell OptiPlex         | Informática   |   1 |        3899.00 |     3899.00 | 2026-04-20  |        3050.00 |     3050.00 |         31 |           1 |          3 |            1
+     33 | Larissa Mendes     | Rafael Martins    | Desktop Dell OptiPlex         | Informática   |   2 |        3899.00 |     7798.00 | 2026-04-05  |        3050.00 |     6100.00 |         28 |           3 |          3 |            1
+     25 | Gabriela Santos    | Marcelo Santos    | Desktop Dell OptiPlex         | Informática   |   1 |        3899.00 |     3899.00 | 2026-02-24  |        3050.00 |     3050.00 |         20 |           5 |          3 |            1
+     17 | André Martins      | Juliana Mendes    | Desktop Dell OptiPlex         | Informática   |   2 |        3899.00 |     7798.00 | 2026-01-15  |        3050.00 |     6100.00 |         12 |           2 |          3 |            1
+     15 | Gabriel Santos     | Marcelo Santos    | Desktop Dell OptiPlex         | Informática   |   1 |        3899.00 |     3899.00 | 2026-05-22  |        3050.00 |     3050.00 |          7 |           5 |          3 |            1
+      6 | Thiago Miranda     | Juliana Mendes    | Desktop Dell OptiPlex         | Informática   |   1 |        3899.00 |     3899.00 | 2026-04-22  |        3050.00 |     3050.00 |          1 |           2 |          3 |            1
+     57 | André Martins      | Juliana Mendes    | Mouse Logitech G502           | Periféricos   |   1 |         399.90 |      399.90 | 2026-08-03  |         300.00 |      300.00 |         12 |           2 |          4 |            2
+     49 | Camila Ferreira    | Patricia Oliveira | Mouse Logitech G502           | Periféricos   |   2 |         399.90 |      799.80 | 2026-06-24  |         300.00 |      600.00 |          4 |           4 |          4 |            2
+     46 | Vanessa Oliveira   | Carlos Henrique   | Mouse Logitech G502           | Periféricos   |   1 |         399.90 |      399.90 | 2026-06-09  |         300.00 |      300.00 |         39 |           1 |          4 |            2
+     38 | Pedro Henrique     | Rafael Martins    | Mouse Logitech G502           | Periféricos   |   2 |         399.90 |      799.80 | 2026-04-30  |         300.00 |      600.00 |         33 |           3 |          4 |            2
+     30 | João Almeida       | Marcelo Santos    | Mouse Logitech G502           | Periféricos   |   1 |         399.90 |      399.90 | 2026-03-21  |         300.00 |      300.00 |         25 |           5 |          4 |            2
+     27 | Helena Barbosa     | Juliana Mendes    | Mouse Logitech G502           | Periféricos   |   2 |         399.90 |      799.80 | 2026-03-06  |         300.00 |      600.00 |         22 |           2 |          4 |            2
+     19 | Bruno Carvalho     | Patricia Oliveira | Mouse Logitech G502           | Periféricos   |   1 |         399.90 |      399.90 | 2026-01-25  |         300.00 |      300.00 |         14 |           4 |          4 |            2
+     11 | Mariana Rocha      | Marcelo Santos    | Mouse Logitech G502           | Periféricos   |   1 |         399.90 |      399.90 | 2026-05-08  |         300.00 |      300.00 |         10 |           5 |          4 |            2
+      1 | Thiago Miranda     | Carlos Henrique   | Mouse Logitech G502           | Periféricos   |   2 |         399.90 |      799.80 | 2026-04-10  |         300.00 |      600.00 |          1 |           1 |          4 |            2
+     59 | Bruno Carvalho     | Patricia Oliveira | Teclado Mecânico Redragon     | Periféricos   |   2 |         299.90 |      599.80 | 2026-08-13  |         220.00 |      440.00 |         14 |           4 |          5 |            2
+     51 | Fernanda Costa     | Carlos Henrique   | Teclado Mecânico Redragon     | Periféricos   |   1 |         299.90 |      299.90 | 2026-07-04  |         220.00 |      220.00 |          6 |           1 |          5 |            2
+     43 | Thiago Ribeiro     | Rafael Martins    | Teclado Mecânico Redragon     | Periféricos   |   2 |         299.90 |      599.80 | 2026-05-25  |         220.00 |      440.00 |         38 |           3 |          5 |            2
+     40 | Renata Martins     | Marcelo Santos    | Teclado Mecânico Redragon     | Periféricos   |   1 |         299.90 |      299.90 | 2026-05-10  |         220.00 |      220.00 |         35 |           5 |          5 |            2
+     32 | Leonardo Souza     | Juliana Mendes    | Teclado Mecânico Redragon     | Periféricos   |   2 |         299.90 |      599.80 | 2026-03-31  |         220.00 |      440.00 |         27 |           2 |          5 |            2
+     24 | Felipe Gomes       | Patricia Oliveira | Teclado Mecânico Redragon     | Periféricos   |   1 |         299.90 |      299.90 | 2026-02-19  |         220.00 |      220.00 |         19 |           4 |          5 |            2
+     21 | Daniel Oliveira    | Carlos Henrique   | Teclado Mecânico Redragon     | Periféricos   |   2 |         299.90 |      599.80 | 2026-02-04  |         220.00 |      440.00 |         16 |           1 |          5 |            2
+      9 | Juliana Martins    | Carlos Henrique   | Teclado Mecânico Redragon     | Periféricos   |   1 |         299.90 |      299.90 | 2026-05-02  |         220.00 |      220.00 |          8 |           1 |          5 |            2
+      1 | Thiago Miranda     | Carlos Henrique   | Teclado Mecânico Redragon     | Periféricos   |   1 |         299.90 |      299.90 | 2026-04-10  |         220.00 |      220.00 |          1 |           1 |          5 |            2
+     56 | Amanda Ferreira    | Carlos Henrique   | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-07-29  |         330.00 |      330.00 |         11 |           1 |          6 |            2
+     53 | Juliana Martins    | Rafael Martins    | Headset HyperX Cloud II       | Periféricos   |   2 |         449.90 |      899.80 | 2026-07-14  |         330.00 |      660.00 |          8 |           3 |          6 |            2
+     45 | Ana Carolina Souza | Marcelo Santos    | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-06-04  |         330.00 |      330.00 |          2 |           5 |          6 |            2
+     37 | Natalia Freitas    | Juliana Mendes    | Headset HyperX Cloud II       | Periféricos   |   2 |         449.90 |      899.80 | 2026-04-25  |         330.00 |      660.00 |         32 |           2 |          6 |            2
+     34 | Lucas Pereira      | Patricia Oliveira | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-04-10  |         330.00 |      330.00 |         29 |           4 |          6 |            2
+     26 | Gustavo Ribeiro    | Carlos Henrique   | Headset HyperX Cloud II       | Periféricos   |   2 |         449.90 |      899.80 | 2026-03-01  |         330.00 |      660.00 |         21 |           1 |          6 |            2
+     18 | Beatriz Almeida    | Rafael Martins    | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-01-20  |         330.00 |      330.00 |         13 |           3 |          6 |            2
+     11 | Mariana Rocha      | Marcelo Santos    | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-05-08  |         330.00 |      330.00 |         10 |           5 |          6 |            2
+      3 | Bruno Almeida      | Carlos Henrique   | Headset HyperX Cloud II       | Periféricos   |   1 |         449.90 |      449.90 | 2026-04-15  |         330.00 |      330.00 |          3 |           1 |          6 |            2
+     58 | Beatriz Almeida    | Rafael Martins    | Webcam Logitech C920          | Periféricos   |   2 |         499.90 |      999.80 | 2026-08-08  |         370.00 |      740.00 |         13 |           3 |          7 |            2
+     50 | Daniel Oliveira    | Marcelo Santos    | Webcam Logitech C920          | Periféricos   |   1 |         499.90 |      499.90 | 2026-06-29  |         370.00 |      370.00 |          5 |           5 |          7 |            2
+     47 | Bruno Almeida      | Juliana Mendes    | Webcam Logitech C920          | Periféricos   |   2 |         499.90 |      999.80 | 2026-06-14  |         370.00 |      740.00 |          3 |           2 |          7 |            2
+     39 | Rafael Gomes       | Patricia Oliveira | Webcam Logitech C920          | Periféricos   |   1 |         499.90 |      499.90 | 2026-05-05  |         370.00 |      370.00 |         34 |           4 |          7 |            2
+     31 | Julia Rodrigues    | Carlos Henrique   | Webcam Logitech C920          | Periféricos   |   2 |         499.90 |      999.80 | 2026-03-26  |         370.00 |      740.00 |         26 |           1 |          7 |            2
+     28 | Igor Mendes        | Rafael Martins    | Webcam Logitech C920          | Periféricos   |   1 |         499.90 |      499.90 | 2026-03-11  |         370.00 |      370.00 |         23 |           3 |          7 |            2
+     20 | Camila Rocha       | Marcelo Santos    | Webcam Logitech C920          | Periféricos   |   2 |         499.90 |      999.80 | 2026-01-30  |         370.00 |      740.00 |         15 |           5 |          7 |            2
+     11 | Mariana Rocha      | Marcelo Santos    | Webcam Logitech C920          | Periféricos   |   1 |         499.90 |      499.90 | 2026-05-08  |         370.00 |      370.00 |         10 |           5 |          7 |            2
+      6 | Thiago Miranda     | Juliana Mendes    | Webcam Logitech C920          | Periféricos   |   1 |         499.90 |      499.90 | 2026-04-22  |         370.00 |      370.00 |          1 |           2 |          7 |            2
+     60 | Camila Rocha       | Marcelo Santos    | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-08-18  |        1150.00 |     1150.00 |         15 |           5 |          8 |            3
+     52 | Gabriel Santos     | Juliana Mendes    | Monitor LG UltraWide 29       | Monitores     |   2 |        1499.90 |     2999.80 | 2026-07-09  |        1150.00 |     2300.00 |          7 |           2 |          8 |            3
+     44 | Thiago Miranda     | Patricia Oliveira | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-05-30  |        1150.00 |     1150.00 |          1 |           4 |          8 |            3
+     41 | Ricardo Nunes      | Carlos Henrique   | Monitor LG UltraWide 29       | Monitores     |   2 |        1499.90 |     2999.80 | 2026-05-15  |        1150.00 |     2300.00 |         36 |           1 |          8 |            3
+     33 | Larissa Mendes     | Rafael Martins    | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-04-05  |        1150.00 |     1150.00 |         28 |           3 |          8 |            3
+     25 | Gabriela Santos    | Marcelo Santos    | Monitor LG UltraWide 29       | Monitores     |   2 |        1499.90 |     2999.80 | 2026-02-24  |        1150.00 |     2300.00 |         20 |           5 |          8 |            3
+     22 | Eduardo Costa      | Juliana Mendes    | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-02-09  |        1150.00 |     1150.00 |         17 |           2 |          8 |            3
+     12 | Bruno Almeida      | Juliana Mendes    | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-05-12  |        1150.00 |     1150.00 |          3 |           2 |          8 |            3
+      2 | Ana Carolina Souza | Juliana Mendes    | Monitor LG UltraWide 29       | Monitores     |   1 |        1499.90 |     1499.90 | 2026-04-12  |        1150.00 |     1150.00 |          2 |           2 |          8 |            3
+     57 | André Martins      | Juliana Mendes    | Monitor Samsung 24 Full HD    | Monitores     |   2 |         899.90 |     1799.80 | 2026-08-03  |         680.00 |     1360.00 |         12 |           2 |          9 |            3
+     54 | Lucas Pereira      | Patricia Oliveira | Monitor Samsung 24 Full HD    | Monitores     |   1 |         899.90 |      899.90 | 2026-07-19  |         680.00 |      680.00 |          9 |           4 |          9 |            3
+     46 | Vanessa Oliveira   | Carlos Henrique   | Monitor Samsung 24 Full HD    | Monitores     |   2 |         899.90 |     1799.80 | 2026-06-09  |         680.00 |     1360.00 |         39 |           1 |          9 |            3
+     38 | Pedro Henrique     | Rafael Martins    | Monitor Samsung 24 Full HD    | Monitores     |   1 |         899.90 |      899.90 | 2026-04-30  |         680.00 |      680.00 |         33 |           3 |          9 |            3
+     35 | Mariana Alves      | Marcelo Santos    | Monitor Samsung 24 Full HD    | Monitores     |   2 |         899.90 |     1799.80 | 2026-04-15  |         680.00 |     1360.00 |         30 |           5 |          9 |            3
+     27 | Helena Barbosa     | Juliana Mendes    | Monitor Samsung 24 Full HD    | Monitores     |   1 |         899.90 |      899.90 | 2026-03-06  |         680.00 |      680.00 |         22 |           2 |          9 |            3
+     19 | Bruno Carvalho     | Patricia Oliveira | Monitor Samsung 24 Full HD    | Monitores     |   2 |         899.90 |     1799.80 | 2026-01-25  |         680.00 |     1360.00 |         14 |           4 |          9 |            3
+     16 | Amanda Ferreira    | Carlos Henrique   | Monitor Samsung 24 Full HD    | Monitores     |   1 |         899.90 |      899.90 | 2026-01-10  |         680.00 |      680.00 |         11 |           1 |          9 |            3
+     15 | Gabriel Santos     | Marcelo Santos    | Monitor Samsung 24 Full HD    | Monitores     |   1 |         899.90 |      899.90 | 2026-05-22  |         680.00 |      680.00 |          7 |           5 |          9 |            3
+      4 | Camila Ferreira    | Rafael Martins    | Monitor Samsung 24 Full HD    | Monitores     |   2 |         899.90 |     1799.80 | 2026-04-18  |         680.00 |     1360.00 |          4 |           3 |          9 |            3
+     59 | Bruno Carvalho     | Patricia Oliveira | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-08-13  |        1700.00 |     1700.00 |         14 |           4 |         10 |            3
+     51 | Fernanda Costa     | Carlos Henrique   | Monitor Dell 27 QHD           | Monitores     |   2 |        2199.90 |     4399.80 | 2026-07-04  |        1700.00 |     3400.00 |          6 |           1 |         10 |            3
+     48 | Vinicius Carvalho  | Rafael Martins    | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-06-19  |        1700.00 |     1700.00 |         40 |           3 |         10 |            3
+     40 | Renata Martins     | Marcelo Santos    | Monitor Dell 27 QHD           | Monitores     |   2 |        2199.90 |     4399.80 | 2026-05-10  |        1700.00 |     3400.00 |         35 |           5 |         10 |            3
+     32 | Leonardo Souza     | Juliana Mendes    | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-03-31  |        1700.00 |     1700.00 |         27 |           2 |         10 |            3
+     29 | Isabela Castro     | Patricia Oliveira | Monitor Dell 27 QHD           | Monitores     |   2 |        2199.90 |     4399.80 | 2026-03-16  |        1700.00 |     3400.00 |         24 |           4 |         10 |            3
+     21 | Daniel Oliveira    | Carlos Henrique   | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-02-04  |        1700.00 |     1700.00 |         16 |           1 |         10 |            3
+     12 | Bruno Almeida      | Juliana Mendes    | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-05-12  |        1700.00 |     1700.00 |          3 |           2 |         10 |            3
+      7 | Fernanda Costa     | Marcelo Santos    | Monitor Dell 27 QHD           | Monitores     |   1 |        2199.90 |     2199.90 | 2026-04-25  |        1700.00 |     1700.00 |          6 |           5 |         10 |            3
+     53 | Juliana Martins    | Rafael Martins    | Smartphone Samsung Galaxy A55 | Eletrônicos   |   1 |        1999.90 |     1999.90 | 2026-07-14  |        1550.00 |     1550.00 |          8 |           3 |         11 |            4
+     45 | Ana Carolina Souza | Marcelo Santos    | Smartphone Samsung Galaxy A55 | Eletrônicos   |   2 |        1999.90 |     3999.80 | 2026-06-04  |        1550.00 |     3100.00 |          2 |           5 |         11 |            4
+     42 | Sabrina Costa      | Juliana Mendes    | Smartphone Samsung Galaxy A55 | Eletrônicos   |   1 |        1999.90 |     1999.90 | 2026-05-20  |        1550.00 |     1550.00 |         37 |           2 |         11 |            4
+     34 | Lucas Pereira      | Patricia Oliveira | Smartphone Samsung Galaxy A55 | Eletrônicos   |   2 |        1999.90 |     3999.80 | 2026-04-10  |        1550.00 |     3100.00 |         29 |           4 |         11 |            4
+     26 | Gustavo Ribeiro    | Carlos Henrique   | Smartphone Samsung Galaxy A55 | Eletrônicos   |   1 |        1999.90 |     1999.90 | 2026-03-01  |        1550.00 |     1550.00 |         21 |           1 |         11 |            4
+     23 | Fernanda Lima      | Rafael Martins    | Smartphone Samsung Galaxy A55 | Eletrônicos   |   2 |        1999.90 |     3999.80 | 2026-02-14  |        1550.00 |     3100.00 |         18 |           3 |         11 |            4
+     14 | Ana Carolina Souza | Patricia Oliveira | Smartphone Samsung Galaxy A55 | Eletrônicos   |   1 |        1999.90 |     1999.90 | 2026-05-18  |        1550.00 |     1550.00 |          2 |           4 |         11 |            4
+      5 | Daniel Oliveira    | Patricia Oliveira | Smartphone Samsung Galaxy A55 | Eletrônicos   |   1 |        1999.90 |     1999.90 | 2026-04-20  |        1550.00 |     1550.00 |          5 |           4 |         11 |            4
+     58 | Beatriz Almeida    | Rafael Martins    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   1 |        1899.90 |     1899.90 | 2026-08-08  |        1450.00 |     1450.00 |         13 |           3 |         12 |            4
+     55 | Mariana Rocha      | Marcelo Santos    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   2 |        1899.90 |     3799.80 | 2026-07-24  |        1450.00 |     2900.00 |         10 |           5 |         12 |            4
+     47 | Bruno Almeida      | Juliana Mendes    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   1 |        1899.90 |     1899.90 | 2026-06-14  |        1450.00 |     1450.00 |          3 |           2 |         12 |            4
+     39 | Rafael Gomes       | Patricia Oliveira | Tablet Samsung Galaxy Tab     | Eletrônicos   |   2 |        1899.90 |     3799.80 | 2026-05-05  |        1450.00 |     2900.00 |         34 |           4 |         12 |            4
+     36 | Matheus Silva      | Carlos Henrique   | Tablet Samsung Galaxy Tab     | Eletrônicos   |   1 |        1899.90 |     1899.90 | 2026-04-20  |        1450.00 |     1450.00 |         31 |           1 |         12 |            4
+     28 | Igor Mendes        | Rafael Martins    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   2 |        1899.90 |     3799.80 | 2026-03-11  |        1450.00 |     2900.00 |         23 |           3 |         12 |            4
+     20 | Camila Rocha       | Marcelo Santos    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   1 |        1899.90 |     1899.90 | 2026-01-30  |        1450.00 |     1450.00 |         15 |           5 |         12 |            4
+     17 | André Martins      | Juliana Mendes    | Tablet Samsung Galaxy Tab     | Eletrônicos   |   2 |        1899.90 |     3799.80 | 2026-01-15  |        1450.00 |     2900.00 |         12 |           2 |         12 |            4
+     10 | Lucas Pereira      | Patricia Oliveira | Tablet Samsung Galaxy Tab     | Eletrônicos   |   1 |        1899.90 |     1899.90 | 2026-05-05  |        1450.00 |     1450.00 |          9 |           4 |         12 |            4
+     60 | Camila Rocha       | Marcelo Santos    | Smart TV LG 50 Polegadas      | Eletrônicos   |   2 |        2799.90 |     5599.80 | 2026-08-18  |        2200.00 |     4400.00 |         15 |           5 |         13 |            4
+     52 | Gabriel Santos     | Juliana Mendes    | Smart TV LG 50 Polegadas      | Eletrônicos   |   1 |        2799.90 |     2799.90 | 2026-07-09  |        2200.00 |     2200.00 |          7 |           2 |         13 |            4
+     49 | Camila Ferreira    | Patricia Oliveira | Smart TV LG 50 Polegadas      | Eletrônicos   |   2 |        2799.90 |     5599.80 | 2026-06-24  |        2200.00 |     4400.00 |          4 |           4 |         13 |            4
+     41 | Ricardo Nunes      | Carlos Henrique   | Smart TV LG 50 Polegadas      | Eletrônicos   |   1 |        2799.90 |     2799.90 | 2026-05-15  |        2200.00 |     2200.00 |         36 |           1 |         13 |            4
+     33 | Larissa Mendes     | Rafael Martins    | Smart TV LG 50 Polegadas      | Eletrônicos   |   2 |        2799.90 |     5599.80 | 2026-04-05  |        2200.00 |     4400.00 |         28 |           3 |         13 |            4
+     30 | João Almeida       | Marcelo Santos    | Smart TV LG 50 Polegadas      | Eletrônicos   |   1 |        2799.90 |     2799.90 | 2026-03-21  |        2200.00 |     2200.00 |         25 |           5 |         13 |            4
+     22 | Eduardo Costa      | Juliana Mendes    | Smart TV LG 50 Polegadas      | Eletrônicos   |   2 |        2799.90 |     5599.80 | 2026-02-09  |        2200.00 |     4400.00 |         17 |           2 |         13 |            4
+      8 | Gabriel Santos     | Rafael Martins    | Smart TV LG 50 Polegadas      | Eletrônicos   |   1 |        2799.90 |     2799.90 | 2026-04-28  |        2200.00 |     2200.00 |          7 |           3 |         13 |            4
+     54 | Lucas Pereira      | Patricia Oliveira | Suporte para Notebook         | Acessórios    |   3 |         129.90 |      389.70 | 2026-07-19  |          85.00 |      255.00 |          9 |           4 |         14 |            5
+     46 | Vanessa Oliveira   | Carlos Henrique   | Suporte para Notebook         | Acessórios    |   2 |         129.90 |      259.80 | 2026-06-09  |          85.00 |      170.00 |         39 |           1 |         14 |            5
+     43 | Thiago Ribeiro     | Rafael Martins    | Suporte para Notebook         | Acessórios    |   3 |         129.90 |      389.70 | 2026-05-25  |          85.00 |      255.00 |         38 |           3 |         14 |            5
+     35 | Mariana Alves      | Marcelo Santos    | Suporte para Notebook         | Acessórios    |   2 |         129.90 |      259.80 | 2026-04-15  |          85.00 |      170.00 |         30 |           5 |         14 |            5
+     27 | Helena Barbosa     | Juliana Mendes    | Suporte para Notebook         | Acessórios    |   1 |         129.90 |      129.90 | 2026-03-06  |          85.00 |       85.00 |         22 |           2 |         14 |            5
+     24 | Felipe Gomes       | Patricia Oliveira | Suporte para Notebook         | Acessórios    |   2 |         129.90 |      259.80 | 2026-02-19  |          85.00 |      170.00 |         19 |           4 |         14 |            5
+     16 | Amanda Ferreira    | Carlos Henrique   | Suporte para Notebook         | Acessórios    |   1 |         129.90 |      129.90 | 2026-01-10  |          85.00 |       85.00 |         11 |           1 |         14 |            5
+     14 | Ana Carolina Souza | Patricia Oliveira | Suporte para Notebook         | Acessórios    |   2 |         129.90 |      259.80 | 2026-05-18  |          85.00 |      170.00 |          2 |           4 |         14 |            5
+      6 | Thiago Miranda     | Juliana Mendes    | Suporte para Notebook         | Acessórios    |   1 |         129.90 |      129.90 | 2026-04-22  |          85.00 |       85.00 |          1 |           2 |         14 |            5
+     59 | Bruno Carvalho     | Patricia Oliveira | Hub USB-C 7 em 1              | Acessórios    |   3 |         189.90 |      569.70 | 2026-08-13  |         130.00 |      390.00 |         14 |           4 |         15 |            5
+     56 | Amanda Ferreira    | Carlos Henrique   | Hub USB-C 7 em 1              | Acessórios    |   1 |         189.90 |      189.90 | 2026-07-29  |         130.00 |      130.00 |         11 |           1 |         15 |            5
+     48 | Vinicius Carvalho  | Rafael Martins    | Hub USB-C 7 em 1              | Acessórios    |   3 |         189.90 |      569.70 | 2026-06-19  |         130.00 |      390.00 |         40 |           3 |         15 |            5
+     40 | Renata Martins     | Marcelo Santos    | Hub USB-C 7 em 1              | Acessórios    |   2 |         189.90 |      379.80 | 2026-05-10  |         130.00 |      260.00 |         35 |           5 |         15 |            5
+     37 | Natalia Freitas    | Juliana Mendes    | Hub USB-C 7 em 1              | Acessórios    |   3 |         189.90 |      569.70 | 2026-04-25  |         130.00 |      390.00 |         32 |           2 |         15 |            5
+     29 | Isabela Castro     | Patricia Oliveira | Hub USB-C 7 em 1              | Acessórios    |   2 |         189.90 |      379.80 | 2026-03-16  |         130.00 |      260.00 |         24 |           4 |         15 |            5
+     21 | Daniel Oliveira    | Carlos Henrique   | Hub USB-C 7 em 1              | Acessórios    |   1 |         189.90 |      189.90 | 2026-02-04  |         130.00 |      130.00 |         16 |           1 |         15 |            5
+     18 | Beatriz Almeida    | Rafael Martins    | Hub USB-C 7 em 1              | Acessórios    |   2 |         189.90 |      379.80 | 2026-01-20  |         130.00 |      260.00 |         13 |           3 |         15 |            5
+     10 | Lucas Pereira      | Patricia Oliveira | Hub USB-C 7 em 1              | Acessórios    |   1 |         189.90 |      189.90 | 2026-05-05  |         130.00 |      130.00 |          9 |           4 |         15 |            5
+      2 | Ana Carolina Souza | Juliana Mendes    | Hub USB-C 7 em 1              | Acessórios    |   1 |         189.90 |      189.90 | 2026-04-12  |         130.00 |      130.00 |          2 |           2 |         15 |            5
+     53 | Juliana Martins    | Rafael Martins    | Mousepad Gamer Grande         | Acessórios    |   3 |          89.90 |      269.70 | 2026-07-14  |          55.00 |      165.00 |          8 |           3 |         16 |            5
+     50 | Daniel Oliveira    | Marcelo Santos    | Mousepad Gamer Grande         | Acessórios    |   1 |          89.90 |       89.90 | 2026-06-29  |          55.00 |       55.00 |          5 |           5 |         16 |            5
+     42 | Sabrina Costa      | Juliana Mendes    | Mousepad Gamer Grande         | Acessórios    |   3 |          89.90 |      269.70 | 2026-05-20  |          55.00 |      165.00 |         37 |           2 |         16 |            5
+     34 | Lucas Pereira      | Patricia Oliveira | Mousepad Gamer Grande         | Acessórios    |   2 |          89.90 |      179.80 | 2026-04-10  |          55.00 |      110.00 |         29 |           4 |         16 |            5
+     31 | Julia Rodrigues    | Carlos Henrique   | Mousepad Gamer Grande         | Acessórios    |   3 |          89.90 |      269.70 | 2026-03-26  |          55.00 |      165.00 |         26 |           1 |         16 |            5
+     23 | Fernanda Lima      | Rafael Martins    | Mousepad Gamer Grande         | Acessórios    |   2 |          89.90 |      179.80 | 2026-02-14  |          55.00 |      110.00 |         18 |           3 |         16 |            5
+      9 | Juliana Martins    | Carlos Henrique   | Mousepad Gamer Grande         | Acessórios    |   1 |          89.90 |       89.90 | 2026-05-02  |          55.00 |       55.00 |          8 |           1 |         16 |            5
+      4 | Camila Ferreira    | Rafael Martins    | Mousepad Gamer Grande         | Acessórios    |   1 |          89.90 |       89.90 | 2026-04-18  |          55.00 |       55.00 |          4 |           3 |         16 |            5
+     55 | Mariana Rocha      | Marcelo Santos    | SSD Kingston 1TB              | Armazenamento |   1 |         499.90 |      499.90 | 2026-07-24  |         370.00 |      370.00 |         10 |           5 |         17 |            6
+     47 | Bruno Almeida      | Juliana Mendes    | SSD Kingston 1TB              | Armazenamento |   2 |         499.90 |      999.80 | 2026-06-14  |         370.00 |      740.00 |          3 |           2 |         17 |            6
+     44 | Thiago Miranda     | Patricia Oliveira | SSD Kingston 1TB              | Armazenamento |   1 |         499.90 |      499.90 | 2026-05-30  |         370.00 |      370.00 |          1 |           4 |         17 |            6
+     36 | Matheus Silva      | Carlos Henrique   | SSD Kingston 1TB              | Armazenamento |   2 |         499.90 |      999.80 | 2026-04-20  |         370.00 |      740.00 |         31 |           1 |         17 |            6
+     28 | Igor Mendes        | Rafael Martins    | SSD Kingston 1TB              | Armazenamento |   1 |         499.90 |      499.90 | 2026-03-11  |         370.00 |      370.00 |         23 |           3 |         17 |            6
+     25 | Gabriela Santos    | Marcelo Santos    | SSD Kingston 1TB              | Armazenamento |   2 |         499.90 |      999.80 | 2026-02-24  |         370.00 |      740.00 |         20 |           5 |         17 |            6
+     17 | André Martins      | Juliana Mendes    | SSD Kingston 1TB              | Armazenamento |   1 |         499.90 |      499.90 | 2026-01-15  |         370.00 |      370.00 |         12 |           2 |         17 |            6
+      5 | Daniel Oliveira    | Patricia Oliveira | SSD Kingston 1TB              | Armazenamento |   2 |         499.90 |      999.80 | 2026-04-20  |         370.00 |      740.00 |          5 |           4 |         17 |            6
+     60 | Camila Rocha       | Marcelo Santos    | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-08-18  |         680.00 |      680.00 |         15 |           5 |         18 |            6
+     57 | André Martins      | Juliana Mendes    | SSD Samsung 2TB               | Armazenamento |   2 |         899.90 |     1799.80 | 2026-08-03  |         680.00 |     1360.00 |         12 |           2 |         18 |            6
+     49 | Camila Ferreira    | Patricia Oliveira | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-06-24  |         680.00 |      680.00 |          4 |           4 |         18 |            6
+     41 | Ricardo Nunes      | Carlos Henrique   | SSD Samsung 2TB               | Armazenamento |   2 |         899.90 |     1799.80 | 2026-05-15  |         680.00 |     1360.00 |         36 |           1 |         18 |            6
+     38 | Pedro Henrique     | Rafael Martins    | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-04-30  |         680.00 |      680.00 |         33 |           3 |         18 |            6
+     30 | João Almeida       | Marcelo Santos    | SSD Samsung 2TB               | Armazenamento |   2 |         899.90 |     1799.80 | 2026-03-21  |         680.00 |     1360.00 |         25 |           5 |         18 |            6
+     22 | Eduardo Costa      | Juliana Mendes    | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-02-09  |         680.00 |      680.00 |         17 |           2 |         18 |            6
+     19 | Bruno Carvalho     | Patricia Oliveira | SSD Samsung 2TB               | Armazenamento |   2 |         899.90 |     1799.80 | 2026-01-25  |         680.00 |     1360.00 |         14 |           4 |         18 |            6
+     13 | Daniel Oliveira    | Carlos Henrique   | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-05-15  |         680.00 |      680.00 |          5 |           1 |         18 |            6
+      7 | Fernanda Costa     | Marcelo Santos    | SSD Samsung 2TB               | Armazenamento |   1 |         899.90 |      899.90 | 2026-04-25  |         680.00 |      680.00 |          6 |           5 |         18 |            6
+     54 | Lucas Pereira      | Patricia Oliveira | Pen Drive Kingston 128GB      | Armazenamento |   1 |          79.90 |       79.90 | 2026-07-19  |          48.00 |       48.00 |          9 |           4 |         19 |            6
+     51 | Fernanda Costa     | Carlos Henrique   | Pen Drive Kingston 128GB      | Armazenamento |   2 |          79.90 |      159.80 | 2026-07-04  |          48.00 |       96.00 |          6 |           1 |         19 |            6
+     43 | Thiago Ribeiro     | Rafael Martins    | Pen Drive Kingston 128GB      | Armazenamento |   1 |          79.90 |       79.90 | 2026-05-25  |          48.00 |       48.00 |         38 |           3 |         19 |            6
+     35 | Mariana Alves      | Marcelo Santos    | Pen Drive Kingston 128GB      | Armazenamento |   3 |          79.90 |      239.70 | 2026-04-15  |          48.00 |      144.00 |         30 |           5 |         19 |            6
+     32 | Leonardo Souza     | Juliana Mendes    | Pen Drive Kingston 128GB      | Armazenamento |   1 |          79.90 |       79.90 | 2026-03-31  |          48.00 |       48.00 |         27 |           2 |         19 |            6
+     24 | Felipe Gomes       | Patricia Oliveira | Pen Drive Kingston 128GB      | Armazenamento |   3 |          79.90 |      239.70 | 2026-02-19  |          48.00 |      144.00 |         19 |           4 |         19 |            6
+     16 | Amanda Ferreira    | Carlos Henrique   | Pen Drive Kingston 128GB      | Armazenamento |   2 |          79.90 |      159.80 | 2026-01-10  |          48.00 |       96.00 |         11 |           1 |         19 |            6
+     14 | Ana Carolina Souza | Patricia Oliveira | Pen Drive Kingston 128GB      | Armazenamento |   3 |          79.90 |      239.70 | 2026-05-18  |          48.00 |      144.00 |          2 |           4 |         19 |            6
+      8 | Gabriel Santos     | Rafael Martins    | Pen Drive Kingston 128GB      | Armazenamento |   2 |          79.90 |      159.80 | 2026-04-28  |          48.00 |       96.00 |          7 |           3 |         19 |            6
+(170 linhas)
+
+ id_vendedor |     vendedor      | total_pedidos | itens_vendidos | faturamento 
+-------------+-------------------+---------------+----------------+-------------
+           5 | Marcelo Santos    |            12 |             50 |    76661.40
+           1 | Carlos Henrique   |            13 |             52 |    65543.90
+           3 | Rafael Martins    |            11 |             51 |    65463.10
+           2 | Juliana Mendes    |            12 |             49 |    63861.50
+           4 | Patricia Oliveira |            12 |             58 |    63532.40
+(5 linhas)
+
+ id_categoria |   categoria   | total_pedidos | itens_vendidos | faturamento 
+--------------+---------------+---------------+----------------+-------------
+            1 | Informática   |            27 |             38 |   148584.50
+            4 | Eletrônicos   |            25 |             36 |    80296.40
+            3 | Monitores     |            27 |             39 |    57896.10
+            2 | Periféricos   |            33 |             51 |    20994.90
+            6 | Armazenamento |            27 |             44 |    20035.60
+            5 | Acessórios    |            27 |             52 |     7254.80
+(6 linhas)
+
+ id_produto |            produto            |   categoria   | qtd_vendida | faturamento 
+------------+-------------------------------+---------------+-------------+-------------
+          1 | Notebook Dell Inspiron 15     | Informática   |          13 |    55898.70
+          3 | Desktop Dell OptiPlex         | Informática   |          13 |    50687.00
+          2 | Notebook Lenovo IdeaPad 3     | Informática   |          12 |    41998.80
+         13 | Smart TV LG 50 Polegadas      | Eletrônicos   |          12 |    33598.80
+         10 | Monitor Dell 27 QHD           | Monitores     |          12 |    26398.80
+         12 | Tablet Samsung Galaxy Tab     | Eletrônicos   |          13 |    24698.70
+         11 | Smartphone Samsung Galaxy A55 | Eletrônicos   |          11 |    21998.90
+          8 | Monitor LG UltraWide 29       | Monitores     |          12 |    17998.80
+          9 | Monitor Samsung 24 Full HD    | Monitores     |          15 |    13498.50
+         18 | SSD Samsung 2TB               | Armazenamento |          14 |    12598.60
+          7 | Webcam Logitech C920          | Periféricos   |          13 |     6498.70
+         17 | SSD Kingston 1TB              | Armazenamento |          12 |     5998.80
+          6 | Headset HyperX Cloud II       | Periféricos   |          12 |     5398.80
+          4 | Mouse Logitech G502           | Periféricos   |          13 |     5198.70
+          5 | Teclado Mecânico Redragon     | Periféricos   |          13 |     3898.70
+         15 | Hub USB-C 7 em 1              | Acessórios    |          19 |     3608.10
+         14 | Suporte para Notebook         | Acessórios    |          17 |     2208.30
+         16 | Mousepad Gamer Grande         | Acessórios    |          16 |     1438.40
+         19 | Pen Drive Kingston 128GB      | Armazenamento |          18 |     1438.20
+(19 linhas)
+
+ id_cliente |      cliente       | total_pedidos | itens_comprados | total_gasto 
+------------+--------------------+---------------+-----------------+-------------
+          1 | Thiago Miranda     |             3 |              11 |    19726.20
+          7 | Gabriel Santos     |             3 |               9 |    17457.30
+          2 | Ana Carolina Souza |             3 |              13 |    17238.70
+         12 | André Martins      |             2 |              10 |    16097.20
+         13 | Beatriz Almeida    |             2 |               9 |    15829.10
+          5 | Daniel Oliveira    |             3 |               9 |    14989.10
+         28 | Larissa Mendes     |             1 |               5 |    14897.70
+         15 | Camila Rocha       |             2 |               8 |    14399.20
+         10 | Mariana Rocha      |             2 |               8 |    13447.40
+         24 | Isabela Castro     |             1 |               6 |    13379.40
+          3 | Bruno Almeida      |             3 |               9 |    11549.10
+         34 | Rafael Gomes       |             1 |               5 |    11299.50
+         18 | Fernanda Lima      |             1 |               6 |    11179.40
+         11 | Amanda Ferreira    |             2 |               8 |    10429.20
+          4 | Camila Ferreira    |             2 |               8 |     9189.20
+         17 | Eduardo Costa      |             1 |               4 |     7999.60
+          6 | Fernanda Costa     |             2 |               7 |     7959.30
+         20 | Gabriela Santos    |             1 |               5 |     7898.60
+          8 | Juliana Martins    |             2 |               9 |     7859.10
+         36 | Ricardo Nunes      |             1 |               5 |     7599.50
+         14 | Bruno Carvalho     |             2 |              11 |     7368.90
+         21 | Gustavo Ribeiro    |             1 |               4 |     7199.60
+         40 | Vinicius Carvalho  |             1 |               5 |     7069.50
+         31 | Matheus Silva      |             1 |               4 |     6798.70
+         37 | Sabrina Costa      |             1 |               5 |     5769.50
+         32 | Natalia Freitas    |             1 |               6 |     5769.40
+         35 | Renata Martins     |             1 |               5 |     5079.50
+         25 | João Almeida       |             1 |               4 |     4999.60
+         23 | Igor Mendes        |             1 |               4 |     4799.60
+         26 | Julia Rodrigues    |             1 |               6 |     4769.40
+         29 | Lucas Pereira      |             1 |               5 |     4629.50
+          9 | Lucas Pereira      |             2 |               7 |     3459.30
+         16 | Daniel Oliveira    |             1 |               4 |     2989.60
+         27 | Leonardo Souza     |             1 |               4 |     2879.60
+         33 | Pedro Henrique     |             1 |               4 |     2599.60
+         39 | Vanessa Oliveira   |             1 |               5 |     2459.50
+         30 | Mariana Alves      |             1 |               7 |     2299.30
+         22 | Helena Barbosa     |             1 |               4 |     1829.60
+         38 | Thiago Ribeiro     |             1 |               6 |     1069.40
+         19 | Felipe Gomes       |             1 |               6 |      799.40
+(40 linhas)
+

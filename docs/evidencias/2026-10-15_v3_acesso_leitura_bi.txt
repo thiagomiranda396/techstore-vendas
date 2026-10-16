@@ -1,0 +1,32 @@
+# Saída de psql -f database/09_acesso_leitura_bi.sql
+# Instância: PostgreSQL 18, porta 5433 (cluster techstore_dev18), banco techstore_dev_v3
+# Usuário: techstore_dev_app (sem senha; SSPI local). Gerado em 2026-10-15.
+
+DO
+BEGIN
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+COMMIT
+      objeto       |  tipo  | pode_ler | pode_alterar 
+-------------------+--------+----------+--------------
+ categoria         | tabela | f        | f
+ cliente           | tabela | f        | f
+ endereco          | tabela | f        | f
+ itens_pedido      | tabela | f        | f
+ pedido            | tabela | f        | f
+ produto           | tabela | f        | f
+ telefone          | tabela | f        | f
+ vendedor          | tabela | f        | f
+ vw_dim_calendario | view   | t        | f
+ vw_dim_cliente    | view   | t        | f
+ vw_dim_produto    | view   | t        | f
+ vw_dim_vendedor   | view   | t        | f
+ vw_fato_vendas    | view   | t        | f
+ vw_vendas         | view   | t        | f
+(14 linhas)
+
