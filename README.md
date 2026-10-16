@@ -1,25 +1,42 @@
 # TechStore Vendas · Análise de vendas com PostgreSQL, API e dashboard web
 
-Projeto de portfólio que leva os dados de uma loja de tecnologia **do banco ao dashboard**:
-- modelagem e correção de um banco **PostgreSQL**, com scripts reproduzíveis e testes automáticos de qualidade;
-- camada analítica em **modelo estrela**;
-- **API somente leitura em Python (FastAPI)**;
-- **dashboard web** em HTML, CSS, JavaScript e Chart.js;
-- material de redesenho do relatório **Power BI**.
+Projeto de portfólio em **Análise de Dados e Business Intelligence**. Ele leva os dados de vendas de uma loja de tecnologia **do banco de dados ao dashboard**, com cada número conferido por testes automáticos.
 
-> 🔗 **Dashboard online (demonstração):** `https://<seu-usuario>.github.io/<repositorio>/` *(o endereço final aparece em Settings › Pages depois da primeira publicação; ver [docs/PUBLICACAO.md](docs/PUBLICACAO.md))*
->
+### ▶ [Acessar o dashboard online](https://thiagomiranda396.github.io/techstore-vendas/)
+
+`https://thiagomiranda396.github.io/techstore-vendas/`, no computador ou no celular, sem instalar nada.
+
 > ⚠️ **Dados fictícios.** Clientes, vendedores e pedidos foram criados para demonstração. Os custos de produto vêm da base de desenvolvimento do autor e também são de uma loja fictícia.
+>
+> 🔒 **A demonstração pública usa dados estáticos.** O GitHub Pages serve um arquivo com os dados já exportados ([web/dados-demo/demo.json](web/dados-demo/demo.json)), e os indicadores são calculados no navegador. A página publicada **não acessa banco de dados, API nem nenhum computador do autor**.
 
-![Dashboard TechStore Vendas](docs/imagens/painel_desktop.png)
+![Dashboard TechStore Vendas: indicadores principais e destaques do período](docs/imagens/painel_desktop.png)
+
+---
+
+## Resumo
+
+| | |
+|---|---|
+| **Objetivo** | Transformar scripts SQL com erros num processo de dados confiável e entregar um painel de vendas, rentabilidade e equipe comercial |
+| **Entregas** | Banco PostgreSQL reproduzível, camada analítica em modelo estrela, API somente leitura, dashboard web publicado e material de Power BI |
+| **Qualidade** | 71 testes no banco, 55 testes na API, 10 testes da demonstração estática e 482 de 482 respostas da demonstração idênticas às da API |
+| **Competências** | Modelagem relacional e dimensional · SQL analítico (funções de janela, CTEs) · qualidade e reconciliação de dados · definição de KPIs · visualização de dados · Python · controle de acesso a dados · documentação de decisões |
+
+**Principais números (dados fictícios, jan a ago/2026):**
+- R$ 335,1 mil de faturamento, com margem bruta de 22,8%;
+- 60 pedidos e ticket médio de R$ 5.584,37;
+- 8 de 19 produtos concentram 81,6% da receita (classe A da curva ABC);
+- Informática responde por 44,3% do faturamento; Acessórios tem a maior margem (33,9%);
+- 37,5% dos clientes compraram mais de uma vez.
 
 ---
 
 ## Problema de negócio
 
-A loja quer responder, com números confiáveis:
+A loja precisa responder, com números confiáveis:
 - **Quanto vendemos e com que rentabilidade?** Faturamento, custo, lucro bruto e margem por mês, categoria e produto.
-- **Onde está a receita?** Concentração de faturamento (curva ABC) e categorias líderes.
+- **Onde está a receita?** Concentração do faturamento (curva ABC) e categorias líderes.
 - **Quem compra e quem volta a comprar?** Clientes ativos e recorrência.
 - **Como está a equipe comercial?** Faturamento, margem, ticket e clientes por vendedor.
 
@@ -28,7 +45,7 @@ O ponto de partida foram scripts SQL que **não rodavam do zero**:
 - itens apontavam para pedidos que não existiam;
 - havia pedidos anteriores ao cadastro do cliente.
 
-Também faltava um relatório **verificável**. O projeto corrige isso, documenta cada decisão e prova os números com testes.
+Também faltava um relatório **verificável**. O projeto corrige esses problemas, documenta cada decisão e prova os números com testes. Os scripts originais foram preservados em [sql/](sql/) como histórico.
 
 ---
 
@@ -36,15 +53,15 @@ Também faltava um relatório **verificável**. O projeto corrige isso, document
 
 | Camada | Tecnologia | Uso no projeto |
 |---|---|---|
-| Banco | **PostgreSQL 18**, **SQL** | DDL com restrições, carga em transação única, views analíticas, papéis de acesso, 71 testes de qualidade em SQL |
+| Banco | **PostgreSQL 18**, **SQL** | Estrutura com restrições, carga em transação única, views analíticas, papéis de acesso, 71 testes de qualidade em SQL |
 | API | **Python 3.12**, **FastAPI**, **psycopg 3**, **pytest** | 7 endpoints somente leitura e 55 testes (reconciliação, segurança e privilégios) |
 | Dashboard | **HTML**, **CSS**, **JavaScript** (módulos ES), **Chart.js 4.4.7** (cópia local) | Painel responsivo, com filtros, comparação entre períodos e tabelas acessíveis |
 | BI | **Power BI**, **DAX**, **Power Query (M)** | Relatório original do autor e material de redesenho: tema, consultas com parâmetros e 35 medidas DAX |
-| Publicação | **GitHub Actions**, **GitHub Pages** | Publicação automática da demonstração estática |
+| Publicação | **GitHub Actions**, **GitHub Pages** | Testes e publicação automática da demonstração estática |
 
 ---
 
-## Arquitetura
+## Arquitetura e fluxo dos dados
 
 ```mermaid
 flowchart LR
@@ -59,15 +76,16 @@ flowchart LR
     V -- "papel techstore_bi_leitor" --> BI["Power BI"]
 ```
 
-- **Localmente**, o dashboard consulta a API, que lê o PostgreSQL com um usuário que **só enxerga 4 views**. O navegador nunca acessa o banco.
-- **Na demonstração pública**, a mesma interface carrega `demo.json` e recalcula os indicadores no navegador ([web/js/demo.js](web/js/demo.js)). Fora de `localhost`, o modo de demonstração é **forçado**, e a página nunca tenta acessar a API nem o banco.
-- **A demonstração é comprovadamente equivalente à API:** em 482 comparações (8 períodos × 10 combinações de filtros × todos os endpoints), houve 0 divergências.
+1. **Carga e validação:** os scripts de [database/](database/) criam as tabelas, carregam os dados e rodam 71 testes. Se algum teste falhar, a carga inteira é desfeita.
+2. **Camada analítica:** views em modelo estrela, sem dados pessoais, servem a API e o Power BI.
+3. **Versão local:** o dashboard consulta a API, que lê o PostgreSQL com um usuário que **só enxerga 4 views**. O navegador nunca acessa o banco.
+4. **Versão pública:** a mesma interface lê `demo.json` e recalcula os indicadores no navegador ([web/js/demo.js](web/js/demo.js)). Fora de `localhost`, esse modo é **obrigatório**. A equivalência com a API foi comprovada em 482 comparações (8 períodos × 10 combinações de filtros × todos os endpoints), com 0 divergências.
 
 Mais detalhes em [docs/DASHBOARD_WEB.md](docs/DASHBOARD_WEB.md).
 
 ---
 
-## Modelagem de dados
+## Modelagem no PostgreSQL
 
 - **Modelo relacional:** 8 tabelas (`cliente`, `endereco`, `telefone`, `vendedor`, `categoria`, `produto`, `pedido`, `itens_pedido`), com:
   - 7 chaves estrangeiras, 13 regras CHECK e 6 índices;
@@ -75,13 +93,12 @@ Mais detalhes em [docs/DASHBOARD_WEB.md](docs/DASHBOARD_WEB.md).
 - **Modelo dimensional (estrela):**
   - `vw_fato_vendas`, com uma linha por item e só chaves e medidas;
   - `vw_dim_produto`, `vw_dim_vendedor` e `vw_dim_cliente`, **sem CPF, e-mail, telefone ou salário**;
-  - `vw_dim_calendario`, com nomes em português e a situação de cada mês (completo ou parcial).
+  - `vw_dim_calendario`, com nomes em português e a situação de cada mês (completo ou parcial);
+  - `vw_vendas`, a view do relatório original, mantida com o mesmo contrato de 15 colunas.
 
 Diagramas em [docs/MODELO_DE_DADOS.md](docs/MODELO_DE_DADOS.md) e colunas em [docs/DICIONARIO_DE_DADOS.md](docs/DICIONARIO_DE_DADOS.md).
 
----
-
-## SQL: o que foi desenvolvido
+### Consultas SQL e views analíticas
 
 | Script | Conteúdo | Técnicas |
 |---|---|---|
@@ -94,7 +111,11 @@ Diagramas em [docs/MODELO_DE_DADOS.md](docs/MODELO_DE_DADOS.md) e colunas em [do
 | [08_verificacoes_qualidade.sql](database/08_verificacoes_qualidade.sql) | **71 testes** | Reconciliação de totais, integridade temporal, órfãos, contrato da view, ausência de dados pessoais |
 | [09](database/09_acesso_leitura_bi.sql) · [10](database/10_acesso_leitura_api.sql) | Acesso | Papéis com privilégio mínimo (`SELECT` só em views) |
 
-**Consultas da API** ([api/techstore_api/consultas/](api/techstore_api/consultas/)): série mensal com `LAG` e média móvel `AVG OVER (ROWS 2 PRECEDING)`, curva ABC com soma acumulada e `DENSE_RANK`, comparação do último mês completo e recorrência de clientes.
+**Consultas do dashboard** ([api/techstore_api/consultas/](api/techstore_api/consultas/)):
+- série mensal com `LAG` e média móvel `AVG OVER (ROWS 2 PRECEDING)`;
+- curva ABC com soma acumulada e `DENSE_RANK`;
+- comparação do último mês completo;
+- recorrência de clientes.
 
 Cada correção feita nos scripts originais está registrada, com evidência, em [docs/DECISOES_E_CORRECOES.md](docs/DECISOES_E_CORRECOES.md).
 
@@ -118,16 +139,23 @@ Cada correção feita nos scripts originais está registrada, com evidência, em
   - período, com atalhos de trimestre e de últimos 3 meses;
   - categorias e vendedores, combináveis;
   - etiquetas removíveis e botão de redefinir;
-  - **filtros refletidos na URL**, para compartilhar uma visão filtrada.
+  - **filtros refletidos na URL**, para compartilhar uma visão filtrada ([exemplo: mai a jul/2026](https://thiagomiranda396.github.io/techstore-vendas/?de=2026-05&ate=2026-07)).
 - **Qualidade de uso:**
-  - layout responsivo (lateral vira menu deslizante no celular);
+  - layout responsivo (no celular, a lateral vira um menu deslizante);
   - tabela alternativa para os gráficos e navegação por teclado;
   - mês parcial sinalizado;
   - estados de "sem vendas" e "fonte indisponível".
 
 | Comparação entre períodos | Celular | Menu no celular |
 |---|---|---|
-| ![Comparação](docs/imagens/painel_comparacao_periodos.png) | ![Celular](docs/imagens/painel_celular.png) | ![Menu](docs/imagens/painel_celular_menu.png) |
+| ![Comparação de mai a jul/2026 com fev a abr/2026](docs/imagens/painel_comparacao_periodos.png) | ![Dashboard no celular](docs/imagens/painel_celular.png) | ![Menu de filtros no celular](docs/imagens/painel_celular_menu.png) |
+
+<details>
+<summary><b>Ver o dashboard completo</b> (tendência, categorias, curva ABC e equipe comercial)</summary>
+
+![Página inteira do dashboard](docs/imagens/painel_desktop_pagina_inteira.png)
+
+</details>
 
 ---
 
@@ -143,25 +171,9 @@ Cada correção feita nos scripts originais está registrada, com evidência, em
 
 ---
 
-## Estrutura do repositório
+## Como executar a versão local
 
-```
-database/        Scripts SQL reproduzíveis (00 executor · 01–06 carga · 07 consultas · 08 testes · 09–10 acesso)
-api/             API FastAPI (techstore_api/), consultas SQL fixas, testes, exportador da demonstração
-web/             Dashboard (HTML/CSS/JS), Chart.js local e dados da demonstração (dados-demo/)
-powerbi/         Tema, consultas Power Query e medidas DAX (sem .pbix)
-docs/            Decisões, modelo, dicionário, validação, dashboard, Power BI, ambiente, publicação
-docs/evidencias/ Saídas reais das execuções de validação do banco
-docs/imagens/    Capturas de tela
-sql/             Scripts originais, preservados como histórico (não executar; ver as correções C2–C5)
-documentacao/    Diagrama conceitual original (BRModelo)
-scripts/         Geração do branch de publicação
-.github/         Publicação automática no GitHub Pages
-```
-
----
-
-## Como executar localmente
+Para só ver o dashboard, use a [demonstração online](https://thiagomiranda396.github.io/techstore-vendas/). A versão local consulta o banco ao vivo pela API.
 
 Pré-requisitos: **PostgreSQL 15 ou mais novo** (validado no 18) com `psql`, e **Python 3.12**.
 
@@ -172,7 +184,7 @@ psql "host=localhost port=5433 dbname=techstore_dev_v1 user=<usuario>" -X -v ON_
 ```
 Resultado esperado: a tabela de testes sem nenhuma FALHA e a mensagem `Carga concluída e validada.` O executor só aceita bancos `techstore_dev*`.
 
-**2. Usuário somente leitura da API.** Crie o papel, defina a senha com `\password` e conceda o acesso; os comandos estão no cabeçalho de [database/10_acesso_leitura_api.sql](database/10_acesso_leitura_api.sql).
+**2. Usuário somente leitura da API.** Crie o papel, defina a senha com `\password` e conceda o acesso. Os comandos estão no cabeçalho de [database/10_acesso_leitura_api.sql](database/10_acesso_leitura_api.sql).
 ```bash
 psql "host=localhost port=5433 dbname=techstore_dev_v1 user=<usuario>" -X -f database/10_acesso_leitura_api.sql
 ```
@@ -183,9 +195,9 @@ cd api
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 powershell -ExecutionPolicy Bypass -File criar_env.ps1   # cria api\.env com a senha digitada de forma oculta (fora do Git)
-.\.venv\Scripts\python.exe -m techstore_api              # http://127.0.0.1:8000
+.\.venv\Scripts\python.exe -m techstore_api              # abra http://127.0.0.1:8000
 ```
-Ajuste o banco e a porta em `api\.env`, se forem diferentes do modelo [api/.env.exemplo](api/.env.exemplo).
+Se o banco e a porta forem diferentes do modelo [api/.env.exemplo](api/.env.exemplo), ajuste-os em `api\.env`.
 
 **4. Demonstração estática, localmente:** `http://127.0.0.1:8000/?fonte=demo`, ou qualquer servidor estático apontado para `web/`.
 
@@ -221,9 +233,25 @@ Os valores de referência são faturamento **R$ 335.062,30**, custo **R$ 258.699
 | Custo histórico | Foi registrado a partir do custo atual na carga inicial (não existe histórico real anterior) |
 | Demonstração pública | Usa um retrato estático dos dados; não consulta o banco ao vivo |
 | API | Feita para uso local, sem autenticação de usuários nem TLS |
-| Navegadores | A interface foi validada no Edge (Chromium); Firefox e Safari não foram testados |
+| Navegadores | Validação automatizada no Edge (Chromium); Firefox e Safari não passaram por testes automatizados |
 
 ---
+
+## Estrutura do repositório
+
+```
+database/        Scripts SQL reproduzíveis (00 executor · 01–06 carga · 07 consultas · 08 testes · 09–10 acesso)
+api/             API FastAPI (techstore_api/), consultas SQL fixas, testes, exportador da demonstração
+web/             Dashboard (HTML/CSS/JS), Chart.js local e dados da demonstração (dados-demo/)
+powerbi/         Tema, consultas Power Query e medidas DAX (sem .pbix)
+docs/            Decisões, modelo, dicionário, validação, dashboard, Power BI, ambiente, publicação
+docs/evidencias/ Saídas reais das execuções de validação do banco
+docs/imagens/    Capturas de tela
+sql/             Scripts originais, preservados como histórico (não executar; ver as correções C2–C5)
+documentacao/    Diagrama conceitual original (BRModelo)
+scripts/         Geração do branch de publicação
+.github/         Testes e publicação automática no GitHub Pages
+```
 
 ## Documentação
 
@@ -239,4 +267,4 @@ Os valores de referência são faturamento **R$ 335.062,30**, custo **R$ 258.699
 
 ---
 
-**Autor:** Thiago Miranda · Dados & Business Intelligence
+**Autor:** Thiago Miranda · Dados & Business Intelligence · [Dashboard online](https://thiagomiranda396.github.io/techstore-vendas/)

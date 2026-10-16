@@ -11,7 +11,7 @@ Material de apoio para divulgar o projeto. Revise e ajuste ao seu tom antes de p
 **Descrição (até 350 caracteres):**
 > Análise de vendas de ponta a ponta: PostgreSQL com 71 testes de qualidade, modelo estrela sem dados pessoais, API FastAPI somente leitura (55 testes) e dashboard web responsivo em Chart.js, com demonstração pública. Material de Power BI com 35 medidas DAX. Dados fictícios.
 
-**Website do repositório:** o endereço do GitHub Pages (Settings › Pages).
+**Website do repositório:** https://thiagomiranda396.github.io/techstore-vendas/ (em *About › Website*, na página do repositório).
 
 **Tópicos:** `postgresql` · `sql` · `data-modeling` · `star-schema` · `data-quality` · `fastapi` · `python` · `javascript` · `chartjs` · `dashboard` · `power-bi` · `dax` · `github-pages` · `portfolio`
 
@@ -21,7 +21,7 @@ Material de apoio para divulgar o projeto. Revise e ajuste ao seu tom antes de p
 - [x] Nenhuma credencial versionada: `api/.env` é ignorado; só o `api/.env.exemplo`, sem valores, vai para o repositório
 - [x] `.pbix` fora do repositório público (identificadores do Power BI Service, credenciais criptografadas e modelo binário não auditável); no lugar, tema, consultas, medidas DAX, guia e capturas
 - [x] Commits publicados com o e-mail privado do GitHub ([PUBLICACAO.md](PUBLICACAO.md))
-- [ ] Atualizar o link da demonstração no README depois da primeira publicação no GitHub Pages
+- [x] Link da demonstração no README
 
 ---
 
@@ -47,7 +47,8 @@ Material de apoio para divulgar o projeto. Revise e ajuste ao seu tom antes de p
 >
 > Os dados são fictícios; o processo é o que eu aplicaria num projeto real.
 >
-> 🔗 Dashboard: [link do GitHub Pages] · Código: [link do repositório]
+> 🔗 Dashboard: https://thiagomiranda396.github.io/techstore-vendas/
+> 💻 Código: https://github.com/thiagomiranda396/techstore-vendas
 >
 > #PostgreSQL #SQL #Python #FastAPI #PowerBI #DataAnalytics #BusinessIntelligence #QualidadeDeDados #Portfolio
 
