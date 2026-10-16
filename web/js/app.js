@@ -5,7 +5,7 @@
 
 import { obter } from "./api.js";
 import {
-  MODO, PARAMETRO_FONTE, TEXTO_CARREGANDO, TEXTO_CONEXAO, TEXTO_INDISPONIVEL, TEXTO_SEM_DADOS,
+  MODO, PARAMETRO_FONTE, TEXTO_CARREGANDO, TEXTO_CONEXAO, TEXTO_FONTE, TEXTO_INDISPONIVEL, TEXTO_SEM_DADOS,
 } from "./config.js";
 import { fmt, mesParcial, ultimoDiaDoMes } from "./formatos.js";
 import { configurarChartJs, graficoMargem, graficoPareto, graficoPedidos, graficoTendencia, graficoTicket } from "./graficos.js";
@@ -794,6 +794,7 @@ async function carregar() {
 
 function iniciar() {
   document.body.dataset.iniciado = "true"; // sinal para js/verificar-carga.js
+  $("rodape-fonte").textContent = TEXTO_FONTE;
   aplicarIcones();
   configurarMenu();
   configurarNavegacao();

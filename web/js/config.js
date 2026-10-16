@@ -25,6 +25,9 @@ export const TEXTO_CONEXAO = MODO === "demo"
 export const TEXTO_CARREGANDO = MODO === "demo" ? "Carregando dados de demonstração…" : "Conectando à API local…";
 export const TEXTO_INDISPONIVEL = MODO === "demo" ? "Dados de demonstração indisponíveis" : "API indisponível";
 export const TEXTO_SEM_DADOS = MODO === "demo" ? "Dados indisponíveis" : "Sem conexão com a API";
+export const TEXTO_FONTE = MODO === "demo"
+  ? "Fonte: retrato estático das views analíticas do PostgreSQL (instância de testes), exportado para um arquivo de dados. Os indicadores são calculados no navegador, sem acesso a banco de dados ou API."
+  : "Fonte: views analíticas do PostgreSQL (instância de testes), lidas por uma API local somente leitura. O navegador não acessa o banco de dados.";
 
 /** Parâmetro de URL a preservar ao reescrever filtros (só faz sentido localmente). */
 export const PARAMETRO_FONTE = local && pedido === "demo" ? "demo" : null;

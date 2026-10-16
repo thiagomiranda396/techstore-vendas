@@ -132,6 +132,8 @@ def test_textos_iniciais_nao_dependem_da_api_local():
     html = (WEB / "index.html").read_text(encoding="utf-8")
     assert '<span id="texto-conexao">Carregando…</span>' in html
     assert "Conectando à API local" not in html
+    assert '<span id="rodape-fonte">Fonte: views analíticas do PostgreSQL (instância de testes).</span>' in html
+    assert "API local" not in re.search(r'TEXTO_FONTE = MODO === "demo"\s*\?\s*"([^"]+)"', (WEB / "js" / "config.js").read_text(encoding="utf-8")).group(1)
 
 
 def test_falha_de_carregamento_e_sinalizada():
