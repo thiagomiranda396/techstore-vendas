@@ -1,0 +1,232 @@
+// =============================================================================
+// TechstoreVendas | Medidas DAX do modelo em estrela
+//
+// Tabelas (consultas em powerbi/modelo/consultas_power_query.m):
+//   'Fato Vendas'  'Dim Cliente'  'Dim Produto'  'Dim Vendedor'  'Calendario'
+// Crie uma tabela vazia "_Medidas" (Inserir dados > tabela vazia) e coloque
+// todas as medidas nela, nas pastas de exibição indicadas.
+//
+// Formatos (Ferramentas de medida > Formato > Personalizado):
+//   MOEDA      "R$ "#,0.00
+//   PERCENTUAL 0.0%
+//   INTEIRO    #,0
+//   DECIMAL    #,0.0
+// Com a localidade do relatório em Português (Brasil), o Power BI exibe
+// R$ 335.062,30 e 22,8%.
+// =============================================================================
+
+
+// ---------------------------------------------------------------- Pasta: 1 Vendas
+
+Faturamento =                                            // MOEDA
+SUM ( 'Fato Vendas'[faturamento] )
+
+Custo =                                                  // MOEDA
+SUM ( 'Fato Vendas'[custo_total] )                       // custo histórico do item
+
+Lucro Bruto =                                            // MOEDA
+SUM ( 'Fato Vendas'[lucro_bruto] )
+
+Margem Bruta % =                                         // PERCENTUAL
+DIVIDE ( [Lucro Bruto], [Faturamento] )
+
+Pedidos =                                                // INTEIRO
+DISTINCTCOUNT ( 'Fato Vendas'[id_pedido] )
+
+Unidades =                                               // INTEIRO
+SUM ( 'Fato Vendas'[quantidade] )
+
+Ticket Médio =                                           // MOEDA
+DIVIDE ( [Faturamento], [Pedidos] )
+
+Itens por Pedido =                                       // DECIMAL
+DIVIDE ( COUNTROWS ( 'Fato Vendas' ), [Pedidos] )
+
+Preço Médio de Venda =                                   // MOEDA
+DIVIDE ( [Faturamento], [Unidades] )
+
+
+// ---------------------------------------------------------------- Pasta: 2 Tempo
+// Requer 'Calendario' marcado como tabela de datas (coluna [data]).
+
+Faturamento Mês Anterior =                               // MOEDA
+CALCULATE ( [Faturamento], DATEADD ( 'Calendario'[data], -1, MONTH ) )
+
+Variação Mensal % =                                      // PERCENTUAL
+// Em branco no mês parcial, para não mostrar uma "queda" que é só falta de dias.
+VAR atual = [Faturamento]
+VAR anterior = [Faturamento Mês Anterior]
+VAR parcial = SELECTEDVALUE ( 'Calendario'[situacao_mes] ) = "Parcial"
+RETURN
+    IF ( NOT parcial && NOT ISBLANK ( anterior ), DIVIDE ( atual - anterior, anterior ) )
+
+Faturamento Acumulado no Ano =                           // MOEDA
+TOTALYTD ( [Faturamento], 'Calendario'[data] )
+
+Média Móvel 3 Meses =                                    // MOEDA
+// Média dos últimos 3 meses; só aparece quando os 3 meses têm operação.
+VAR fim = MAX ( 'Calendario'[data] )
+VAR periodo = DATESINPERIOD ( 'Calendario'[data], fim, -3, MONTH )
+VAR inicioPeriodo = MINX ( periodo, 'Calendario'[data] )
+VAR primeiraVenda = CALCULATE ( MIN ( 'Fato Vendas'[data_pedido] ), REMOVEFILTERS () )
+VAR total = CALCULATE ( [Faturamento], periodo )
+RETURN
+    IF ( inicioPeriodo >= DATE ( YEAR ( primeiraVenda ), MONTH ( primeiraVenda ), 1 ), DIVIDE ( total, 3 ) )
+
+Último Mês Completo =                                    // data, formato mmm/aa
+CALCULATE (
+    MAX ( 'Calendario'[inicio_mes] ),
+    REMOVEFILTERS ( 'Calendario' ),
+    'Calendario'[situacao_mes] = "Completo"
+)
+
+Faturamento Último Mês Completo =                        // MOEDA
+VAR mes = [Último Mês Completo]
+RETURN
+    CALCULATE ( [Faturamento], REMOVEFILTERS ( 'Calendario' ), 'Calendario'[inicio_mes] = mes )
+
+Variação Último Mês Completo % =                         // PERCENTUAL
+VAR mes = [Último Mês Completo]
+VAR atual = CALCULATE ( [Faturamento], REMOVEFILTERS ( 'Calendario' ), 'Calendario'[inicio_mes] = mes )
+VAR anterior = CALCULATE ( [Faturamento], REMOVEFILTERS ( 'Calendario' ), 'Calendario'[inicio_mes] = EDATE ( mes, -1 ) )
+RETURN
+    DIVIDE ( atual - anterior, anterior )
+
+Dias com Operação =                                      // INTEIRO
+// Dias do período selecionado entre a primeira e a última venda registradas.
+VAR primeira = CALCULATE ( MIN ( 'Fato Vendas'[data_pedido] ), REMOVEFILTERS () )
+VAR ultima = CALCULATE ( MAX ( 'Fato Vendas'[data_pedido] ), REMOVEFILTERS () )
+VAR ini = MAX ( MIN ( 'Calendario'[data] ), primeira )
+VAR fim = MIN ( MAX ( 'Calendario'[data] ), ultima )
+RETURN
+    IF ( fim >= ini, DATEDIFF ( ini, fim, DAY ) + 1 )
+
+
+// ---------------------------------------------------------------- Pasta: 3 Clientes
+
+Clientes Ativos =                                        // INTEIRO
+DISTINCTCOUNT ( 'Fato Vendas'[id_cliente] )
+
+Clientes Recorrentes =                                   // INTEIRO
+// Clientes com 2 ou mais pedidos no período selecionado.
+COUNTROWS (
+    FILTER (
+        VALUES ( 'Fato Vendas'[id_cliente] ),
+        CALCULATE ( DISTINCTCOUNT ( 'Fato Vendas'[id_pedido] ) ) >= 2
+    )
+)
+
+% Clientes Recorrentes =                                 // PERCENTUAL
+DIVIDE ( [Clientes Recorrentes], [Clientes Ativos] )
+
+Novos Clientes =                                         // INTEIRO
+// Clientes cadastrados nas datas selecionadas (sem relacionamento extra no modelo).
+CALCULATE (
+    COUNTROWS ( 'Dim Cliente' ),
+    TREATAS ( VALUES ( 'Calendario'[data] ), 'Dim Cliente'[data_cadastro] )
+)
+
+Dias até a 1ª Compra (média) =                           // DECIMAL
+AVERAGEX (
+    VALUES ( 'Dim Cliente'[id_cliente] ),
+    VAR cadastro = CALCULATE ( MAX ( 'Dim Cliente'[data_cadastro] ) )
+    VAR primeira = CALCULATE ( MIN ( 'Fato Vendas'[data_pedido] ), REMOVEFILTERS ( 'Calendario' ) )
+    RETURN IF ( NOT ISBLANK ( primeira ), DATEDIFF ( cadastro, primeira, DAY ) )
+)
+
+
+// ---------------------------------------------------------------- Pasta: 4 Produtos
+
+% do Faturamento =                                       // PERCENTUAL
+DIVIDE ( [Faturamento], CALCULATE ( [Faturamento], ALLSELECTED ( 'Dim Produto' ) ) )
+
+% Acumulado ABC =                                        // PERCENTUAL
+// Participação acumulada (Pareto), do produto de maior faturamento para o menor.
+VAR fatProduto = [Faturamento]
+VAR total = CALCULATE ( [Faturamento], ALLSELECTED ( 'Dim Produto' ) )
+VAR acumulado =
+    SUMX (
+        FILTER (
+            ADDCOLUMNS ( ALLSELECTED ( 'Dim Produto'[id_produto] ), "@fat", [Faturamento] ),
+            [@fat] >= fatProduto
+        ),
+        [@fat]
+    )
+RETURN
+    IF ( NOT ISBLANK ( fatProduto ), DIVIDE ( acumulado, total ) )
+
+Classe ABC =                                             // texto
+// A: até 80% do faturamento acumulado; B: até 95%; C: restante.
+VAR acumulado = [% Acumulado ABC]
+VAR antes = acumulado - [% do Faturamento]
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( acumulado ), BLANK (), antes < 0.80, "A", antes < 0.95, "B", "C" )
+
+Ranking Produto =                                        // INTEIRO
+IF (
+    ISINSCOPE ( 'Dim Produto'[produto] ),
+    RANKX ( ALLSELECTED ( 'Dim Produto'[produto] ), [Faturamento], , DESC, DENSE )
+)
+
+Estoque Atual =                                          // INTEIRO
+// Foto do catálogo (não histórico).
+SUM ( 'Dim Produto'[estoque_atual] )
+
+Cobertura de Estoque (dias) =                            // DECIMAL
+// Estoque atual ÷ venda média diária do período selecionado.
+DIVIDE ( [Estoque Atual], DIVIDE ( [Unidades], [Dias com Operação] ) )
+
+
+// ---------------------------------------------------------------- Pasta: 5 Vendedores
+
+Ranking Vendedor =                                       // INTEIRO
+IF (
+    ISINSCOPE ( 'Dim Vendedor'[vendedor] ),
+    RANKX ( ALLSELECTED ( 'Dim Vendedor'[vendedor] ), [Faturamento], , DESC, DENSE )
+)
+
+Clientes Atendidos =                                     // INTEIRO
+DISTINCTCOUNT ( 'Fato Vendas'[id_cliente] )
+
+
+// ---------------------------------------------------------------- Pasta: 6 Textos e formatação
+
+Data da Última Venda =                                   // data, formato dd/mm/aaaa
+CALCULATE ( MAX ( 'Fato Vendas'[data_pedido] ), REMOVEFILTERS () )
+
+Aviso do Período =                                       // texto (subtítulo da página)
+"Dados até " & FORMAT ( [Data da Última Venda], "dd/mm/yyyy" )
+    & " · agosto/2026 é mês parcial · dados fictícios para portfólio"
+
+Rótulo Último Mês Completo =                             // texto
+FORMAT ( [Último Mês Completo], "mmmm/yyyy" )
+
+Rótulo Variação =                                        // texto (cartões de KPI)
+// Seta + sinal + rótulo: a variação nunca depende só da cor.
+VAR v = [Variação Último Mês Completo %]
+RETURN
+    IF (
+        NOT ISBLANK ( v ),
+        IF ( v >= 0, "▲ +", "▼ −" ) & FORMAT ( ABS ( v ), "0.0%" ) & " vs mês anterior"
+    )
+
+Cor Variação =                                           // texto (formatação condicional > valor do campo)
+VAR v = [Variação Último Mês Completo %]
+RETURN
+    SWITCH ( TRUE (), ISBLANK ( v ), "#898781", v >= 0, "#006300", "#D03B3B" )
+
+
+// =============================================================================
+// Correspondência com o relatório original (TECHSTORE_VENDAS.pbix)
+//   Faturamento Total  -> Faturamento
+//   Custo Total        -> Custo           (original: custo ATUAL do produto, via vw_vendas;
+//                                          novo: custo HISTÓRICO do item, via vw_fato_vendas;
+//                                          hoje os dois somam R$ 258.699,00)
+//   Lucro Bruto        -> Lucro Bruto
+//   Margem de Lucro    -> Margem Bruta %
+//   Total Pedidos      -> Pedidos
+//   Qtd Produtos       -> Unidades        (confirmar a fórmula original no .pbix)
+//   Ticket Médio       -> Ticket Médio
+//   Preço Médio        -> Preço Médio de Venda (confirmar a fórmula original no .pbix)
+//   Ranking Vendedor   -> Ranking Vendedor
+// =============================================================================
