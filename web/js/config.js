@@ -21,6 +21,11 @@ export const TEXTO_CONEXAO = MODO === "demo"
   ? "Demonstração · dados fictícios estáticos"
   : `${API_BASE === "" ? "API local" : "API local (prévia de desenvolvimento)"} · conectada`;
 
+/** Textos de estado que dependem da fonte: a demonstração nunca menciona a API local. */
+export const TEXTO_CARREGANDO = MODO === "demo" ? "Carregando dados de demonstração…" : "Conectando à API local…";
+export const TEXTO_INDISPONIVEL = MODO === "demo" ? "Dados de demonstração indisponíveis" : "API indisponível";
+export const TEXTO_SEM_DADOS = MODO === "demo" ? "Dados indisponíveis" : "Sem conexão com a API";
+
 /** Parâmetro de URL a preservar ao reescrever filtros (só faz sentido localmente). */
 export const PARAMETRO_FONTE = local && pedido === "demo" ? "demo" : null;
 

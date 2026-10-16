@@ -249,6 +249,8 @@ O mesmo frontend roda em dois modos, decididos em `web/js/config.js`:
 - **Sem código de interface duplicado:** só `api.js` muda de rota. Em modo demonstração, ele importa `demo.js`, que responde aos mesmos caminhos e parâmetros da API. Os filtros, os gráficos e a URL compartilhável são os mesmos.
 - **Nenhum acesso à máquina local:** em modo demonstração não há `fetch` para a API. O cabeçalho mostra "Demonstração · dados fictícios" e o status mostra "Demonstração · dados fictícios estáticos".
 - **Dados:** `api/exportar_demo.py` exporta, com o papel somente leitura, os 170 itens de venda, 19 produtos, 5 vendedores, 8 meses e as listas de filtros (cerca de 10 KB). São só colunas das views analíticas, sem nome de cliente, CPF, e-mail, telefone nem salário.
+- **Textos por modo:** na demonstração, o status e os avisos nunca mencionam a API local ("Carregando dados de demonstração…", "Dados de demonstração indisponíveis"). O HTML começa com um neutro "Carregando…", válido antes de qualquer script rodar.
+- **Falha de carregamento:** `js/verificar-carga.js` é um script clássico, fora dos módulos. Se no `DOMContentLoaded` o `app.js` não tiver iniciado (um módulo que falhou ou veio desatualizado do cache logo após uma publicação), ele mostra "Não foi possível carregar o painel" com um botão "Recarregar página", em vez de deixar a página parada. Sem JavaScript, um `<noscript>` explica o motivo.
 - **Mesmos arredondamentos:** os cálculos usam centavos inteiros. O arredondamento segue o `ROUND` do PostgreSQL (metade para longe do zero), exceto onde a API usa o `round` do Python (metade para o par).
 
 **Validação (2026-10-16):**
@@ -258,6 +260,16 @@ O mesmo frontend roda em dois modos, decididos em `web/js/config.js`:
 | Equivalência `demo.js` × API: 8 períodos × 10 combinações de filtros × 6 endpoints, mais filtros e saúde | ✅ **482/482 respostas idênticas**, 0 requisições à API |
 | Suíte de interface sobre uma cópia estática em subpasta (como no Pages), servida por `http.server` | ✅ Mesmos cenários da tabela acima: filtros, comparação, URL, estado vazio, 7 larguras e menu no celular |
 | Console | ✅ 0 erros |
+
+**Correção de 2026-10-16 (página pública parada em "Conectando à API local…"):** os arquivos servidos pelo Pages eram idênticos ao commit e a página carregava num navegador limpo, mas o texto inicial do HTML e os avisos de erro falavam em API mesmo no modo demonstração, e uma falha ao carregar um módulo deixava a página parada sem explicação. Depois da correção:
+
+| Verificação | Resultado |
+|---|---|
+| `api/tests/test_demo_estatica.py` (sem banco; também no workflow) | ✅ 10/10 |
+| Suíte de interface na cópia estática em subpasta | ✅ 0 falhas |
+| `demo.json` bloqueado | ✅ "Demonstração indisponível", status "Dados de demonstração indisponíveis", nenhuma menção à API |
+| `config.js` ou `app.js` bloqueado | ✅ "Não foi possível carregar o painel" e botão "Recarregar página", que recupera o painel |
+| Modo API local (suíte completa) | ✅ 0 falhas, status "API local · conectada" |
 
 A publicação está em [PUBLICACAO.md](PUBLICACAO.md).
 

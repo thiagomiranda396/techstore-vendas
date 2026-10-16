@@ -4,7 +4,9 @@
 // a partir das respostas da API somente leitura.
 
 import { obter } from "./api.js";
-import { MODO, PARAMETRO_FONTE, TEXTO_CONEXAO } from "./config.js";
+import {
+  MODO, PARAMETRO_FONTE, TEXTO_CARREGANDO, TEXTO_CONEXAO, TEXTO_INDISPONIVEL, TEXTO_SEM_DADOS,
+} from "./config.js";
 import { fmt, mesParcial, ultimoDiaDoMes } from "./formatos.js";
 import { configurarChartJs, graficoMargem, graficoPareto, graficoPedidos, graficoTendencia, graficoTicket } from "./graficos.js";
 import { aplicarIcones, icone } from "./icones.js";
@@ -762,7 +764,7 @@ async function atualizar() {
     document.body.dataset.pronto = "true"; // usado pela verificação automatizada
   } catch (erro) {
     if (id !== estado.requisicao) return;
-    marcarConexao("erro", "API indisponível");
+    marcarConexao("erro", TEXTO_INDISPONIVEL);
     mostrarAlerta(erro.message);
   } finally {
     if (id === estado.requisicao) document.body.classList.remove("carregando");
@@ -770,14 +772,14 @@ async function atualizar() {
 }
 
 async function carregar() {
-  marcarConexao("conectando", "Conectando à API local…");
+  marcarConexao("conectando", TEXTO_CARREGANDO);
   try {
     const filtros = await obter("/api/filtros");
     if (!estado.filtros) montarFiltros(filtros);
     await atualizar();
   } catch (erro) {
-    marcarConexao("erro", "API indisponível");
-    $("chip-periodo").textContent = "Sem conexão com a API";
+    marcarConexao("erro", TEXTO_INDISPONIVEL);
+    $("chip-periodo").textContent = TEXTO_SEM_DADOS;
     document.body.classList.add("sem-dados");
     if (MODO === "demo") {
       mostrarAlerta(erro.message, "Demonstração indisponível");
@@ -791,6 +793,7 @@ async function carregar() {
 }
 
 function iniciar() {
+  document.body.dataset.iniciado = "true"; // sinal para js/verificar-carga.js
   aplicarIcones();
   configurarMenu();
   configurarNavegacao();

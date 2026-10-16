@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - "web/**"
+      - "api/tests/test_demo_estatica.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -43,6 +44,18 @@ jobs:
           if grep -Eiq "cpf|e-?mail|telefone|salario" web/dados-demo/demo.json; then
             echo "Possível dado pessoal em demo.json"; exit 1
           fi
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Testar a demonstração estática
+        # Sem banco nem API: valores de referência, ausência de dados pessoais,
+        # arquivos e importações com a grafia exata (o Pages diferencia maiúsculas).
+        run: |
+          python -m pip install --disable-pip-version-check -q pytest==9.1.1
+          python -m pytest api/tests/test_demo_estatica.py --noconftest -q -p no:cacheprovider
 
       - name: Configurar o Pages
         uses: actions/configure-pages@v5

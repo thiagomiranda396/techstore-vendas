@@ -57,12 +57,15 @@ git push origin publicacao:main
 
 Não faça commits direto no `main` do GitHub nem em `publicacao`: o fluxo é sempre `main` local → `publicacao` → `origin/main`.
 
+**Cache do navegador:** o GitHub Pages manda o navegador guardar os arquivos por 10 minutos. Logo depois de uma publicação, quem já abriu a página pode receber uma mistura de arquivos antigos e novos. Nesse caso o painel mostra "Não foi possível carregar o painel" e um botão para recarregar, e um Ctrl+F5 (Cmd+Shift+R no Mac) resolve.
+
 ## O que o workflow verifica
 
 Antes de publicar, o workflow interrompe a publicação se:
 
 - `web/` contiver arquivos `.py`, `.env`, `.pbix` ou `.sql`;
-- `demo.json` contiver campos de dados pessoais (`cpf`, `email`, `telefone`, `salario`).
+- `demo.json` contiver campos de dados pessoais (`cpf`, `email`, `telefone`, `salario`);
+- algum dos 10 testes de [`api/tests/test_demo_estatica.py`](../api/tests/test_demo_estatica.py) falhar. Eles conferem, sem banco, os valores de referência, a ausência de dados pessoais, a grafia exata de arquivos e importações (o Pages diferencia maiúsculas de minúsculas) e o modo demonstração fora de localhost.
 
 Ele envia ao Pages **somente** a pasta `web/`.
 

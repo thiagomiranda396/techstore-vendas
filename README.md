@@ -201,6 +201,7 @@ O passo a passo completo, incluindo a instância de testes isolada, está em [do
 |---|---|---|
 | Banco | `database/00_executar_tudo.sql` (roda o `08`) | **71/71** testes bloqueantes; reexecução sem alterar nada (impressão digital idêntica) |
 | API | `cd api` e `.\.venv\Scripts\python.exe -m pytest` | **55/55**: reconciliação com os valores de referência, segurança (entradas, métodos, cabeçalhos, CORS, ausência de dados pessoais) e privilégios reais do papel |
+| Demonstração estática | Mesmo comando (ou `python -m pytest api/tests/test_demo_estatica.py --noconftest`, sem banco) | **10/10**: valores de referência, ausência de dados pessoais, arquivos com a grafia exata e modo demonstração fora de localhost. Também roda no workflow, antes de cada publicação |
 | Demonstração × API | Comparação automatizada | **482/482** respostas idênticas, sem nenhuma requisição à API |
 | Interface | Navegador automatizado (Edge, protocolo DevTools) | Filtros, combinações, URL, estado vazio, 7 larguras de tela, menu do celular; 0 erros de console do projeto |
 
