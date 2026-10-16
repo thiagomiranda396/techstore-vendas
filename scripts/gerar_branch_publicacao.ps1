@@ -31,6 +31,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+# Mensagens de commit são UTF-8: sem isto, o PowerShell 5.1 corrompe os acentos ao ler a saída do git.
+[Console]::OutputEncoding = New-Object Text.UTF8Encoding($false)
 Set-Location (git rev-parse --show-toplevel)
 
 if ($Email -notmatch '^[^@\s]+@[^@\s]+\.[^@\s]+$') { throw "E-mail inválido: $Email" }
@@ -53,7 +55,8 @@ try {
         git rm --cached -q --ignore-unmatch -- $Excluir | Out-Null
         $arvore = (git write-tree).Trim()
 
-        $mensagem = (git log -1 --format=%B $commit).TrimEnd() + "`n`nEspelho-de: $commit`n"
+        # A saída do git chega como um array de linhas: juntar com "`n" preserva as quebras.
+        $mensagem = ((git log -1 --format=%B $commit) -join "`n").TrimEnd() + "`n`nEspelho-de: $commit`n"
         $arquivoMsg = "$indice.msg"
         [IO.File]::WriteAllText($arquivoMsg, $mensagem, (New-Object Text.UTF8Encoding($false)))
 
