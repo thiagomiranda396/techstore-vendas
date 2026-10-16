@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSP também como meta: vale mesmo quando a página é servida pela Live Preview.
+       connect-src libera só a própria origem, a API local e o WebSocket de recarga
+       automática da Live Preview (porta 3001). Servida pela API, a página também
+       recebe a CSP do cabeçalho HTTP, mais restrita (só 'self'): valem as duas. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:8000 ws://127.0.0.1:3001; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Painel comercial da Techstore Vendas: faturamento, rentabilidade e eficiência comercial. Dados fictícios de portfólio servidos por uma API somente leitura sobre PostgreSQL.">
+  <meta name="author" content="Thiago Miranda">
+  <title>Desempenho de Vendas · Techstore Vendas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230B1F3A'/%3E%3Cpath d='M8 16v-4M12 16V8M16 16v-6' stroke='%235EA2F0' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/estilos.css">
+  <script src="vendor/chartjs-4.4.7/chart.umd.js" defer></script>
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Barra superior: só em telas menores, abre a lateral -->
+  <header class="barra-movel">
+    <button type="button" class="barra-movel__botao" id="abrir-menu" aria-controls="lateral" aria-expanded="false">
+      <span data-icone="menu"></span>
+      <span>Filtros e menu</span>
+      <span class="contador" id="contador-filtros-movel" hidden></span>
+    </button>
+    <span class="barra-movel__marca"><span data-icone="logo" class="icone icone--logo"></span>Techstore Vendas</span>
+  </header>
+
+  <div class="app">
+    <!-- ================================================================ LATERAL -->
+    <aside class="lateral" id="lateral" aria-label="Navegação e filtros">
+      <div class="lateral__topo">
+        <div class="marca">
+          <span class="marca__logo"><span data-icone="logo" class="icone"></span></span>
+          <div>
+            <p class="marca__nome">Techstore Vendas</p>
+            <p class="marca__desc">Painel comercial</p>
+          </div>
+        </div>
+        <button type="button" class="lateral__fechar" id="fechar-menu" aria-label="Fechar menu"><span data-icone="fechar"></span></button>
+      </div>
+
+      <div class="perfil">
+        <span class="perfil__avatar" aria-hidden="true">TM</span>
+        <div>
+          <p class="perfil__nome">Thiago Miranda</p>
+          <p class="perfil__cargo">Dados &amp; Business Intelligence</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Seções do painel">
+        <a class="nav__link" href="#visao-geral" data-secao="visao-geral"><span data-icone="visao"></span>Visão geral</a>
+        <a class="nav__link" href="#tendencia" data-secao="tendencia"><span data-icone="tendencia"></span>Tendência</a>
+        <a class="nav__link" href="#categorias" data-secao="categorias"><span data-icone="categorias"></span>Categorias</a>
+        <a class="nav__link" href="#produtos" data-secao="produtos"><span data-icone="produtos"></span>Produtos</a>
+        <a class="nav__link" href="#equipe" data-secao="equipe"><span data-icone="equipe"></span>Equipe comercial</a>
+      </nav>
+
+      <section class="filtros" aria-labelledby="titulo-filtros">
+        <div class="filtros__cab">
+          <h2 class="filtros__titulo" id="titulo-filtros"><span data-icone="filtro"></span>Filtros</h2>
+          <span class="contador" id="contador-filtros" hidden></span>
+        </div>
+
+        <fieldset class="grupo">
+          <legend class="grupo__titulo">Período</legend>
+          <div class="periodo">
+            <label class="periodo__campo">
+              <span>De</span>
+              <input class="campo" type="month" id="f-inicio">
+            </label>
+            <label class="periodo__campo">
+              <span>Até</span>
+              <input class="campo" type="month" id="f-fim">
+            </label>
+          </div>
+          <div class="atalhos" id="atalhos-periodo" role="group" aria-label="Atalhos de período"></div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend class="grupo__titulo">Categorias</legend>
+          <div class="opcoes" id="f-categoria"></div>
+        </fieldset>
+
+        <fieldset class="grupo">
+          <legend class="grupo__titulo">Vendedores</legend>
+          <div class="opcoes" id="f-vendedor"></div>
+        </fieldset>
+
+        <button type="button" class="botao-redefinir" id="limpar"><span data-icone="redefinir"></span>Redefinir filtros</button>
+      </section>
+
+      <div class="lateral__rodape">
+        <span class="selo-ficticio">Dados fictícios de portfólio</span>
+        <p class="conexao" id="conexao" data-estado="conectando">
+          <span class="conexao__ponto" aria-hidden="true"></span>
+          <span id="texto-conexao">Conectando à API local…</span>
+        </p>
+        <p class="lateral__stack">PostgreSQL · FastAPI · Chart.js</p>
+      </div>
+    </aside>
+    <div class="sobreposicao" id="sobreposicao" hidden></div>
+
+    <!-- ================================================================ CONTEÚDO -->
+    <main id="conteudo" class="principal">
+      <!-- Cabeçalho: título como protagonista; abaixo, só o período e os filtros ativos.
+           A identificação do projeto e o aviso de dados fictícios ficam na lateral e no rodapé. -->
+      <header class="cabecalho" id="visao-geral">
+        <h1 class="titulo">Desempenho de Vendas</h1>
+        <div class="cabecalho__meta">
+          <span class="cabecalho__periodo"><span data-icone="calendario"></span><span id="chip-periodo">Carregando período…</span></span>
+          <span class="cabecalho__parcial" id="chip-parcial" hidden></span>
+          <span class="cabecalho__demo">Demonstração · dados fictícios</span>
+        </div>
+        <div class="filtros-ativos" id="filtros-ativos" aria-live="polite"></div>
+      </header>
+
+      <div class="alerta" id="alerta" role="alert" hidden>
+        <span data-icone="alerta"></span>
+        <div>
+          <p class="alerta__titulo" id="alerta-titulo">Não foi possível atualizar os dados</p>
+          <p class="alerta__texto" id="alerta-texto"></p>
+        </div>
+        <button type="button" class="alerta__botao" id="tentar-novamente">Tentar novamente</button>
+      </div>
+
+      <div class="corpo" id="corpo">
+        <!-- Indicadores -->
+        <section class="kpis" aria-label="Indicadores principais" id="kpis"></section>
+        <p class="nota-comparacao" id="nota-comparacao"></p>
+
+        <!-- Destaques calculados a partir dos dados -->
+        <section class="cartao destaques" aria-labelledby="t-destaques">
+          <h2 class="destaques__titulo" id="t-destaques"><span data-icone="destaque"></span>Destaques do período</h2>
+          <ul class="destaques__lista" id="lista-destaques"></ul>
+        </section>
+
+        <!-- Tendência -->
+        <section class="secao" id="tendencia" aria-labelledby="t-secao-tendencia">
+          <h2 class="secao__titulo" id="t-secao-tendencia">Tendência</h2>
+          <div class="secao__grade secao__grade--2-1">
+            <article class="cartao" data-grafico="tendencia" aria-labelledby="t-tendencia">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-tendencia">Faturamento, custo e lucro por mês</h3>
+                  <p class="cartao__sub" id="s-tendencia">Barras: custo + lucro bruto = faturamento · linha: média móvel de 3 meses</p>
+                </div>
+                <button type="button" class="alternar" data-alvo="tendencia" aria-pressed="false"><span data-icone="tabela"></span><span>Tabela</span></button>
+              </header>
+              <div class="grafico grafico--alto"><canvas id="g-tendencia" role="img" aria-label="Faturamento, custo e lucro por mês"></canvas></div>
+              <div class="tabela-alt" id="tab-tendencia" hidden></div>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+
+            <article class="cartao" data-grafico="ritmo" aria-labelledby="t-ritmo">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-ritmo">Pedidos e ticket médio</h3>
+                  <p class="cartao__sub">Volume e valor médio por pedido, mês a mês</p>
+                </div>
+                <button type="button" class="alternar" data-alvo="ritmo" aria-pressed="false"><span data-icone="tabela"></span><span>Tabela</span></button>
+              </header>
+              <div class="grafico-duplo">
+                <p class="grafico-duplo__rotulo">Pedidos</p>
+                <div class="grafico grafico--mini"><canvas id="g-pedidos" role="img" aria-label="Pedidos por mês"></canvas></div>
+                <p class="grafico-duplo__rotulo">Ticket médio</p>
+                <div class="grafico grafico--mini"><canvas id="g-ticket" role="img" aria-label="Ticket médio por mês"></canvas></div>
+              </div>
+              <div class="tabela-alt" id="tab-ritmo" hidden></div>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Categorias -->
+        <section class="secao" id="categorias" aria-labelledby="t-secao-categorias">
+          <h2 class="secao__titulo" id="t-secao-categorias">Categorias</h2>
+          <div class="secao__grade secao__grade--1-1">
+            <article class="cartao" aria-labelledby="t-mix">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-mix">Participação no faturamento</h3>
+                  <p class="cartao__sub">Quanto cada categoria representa da receita do período</p>
+                </div>
+              </header>
+              <ol class="lista-barras" id="lista-mix"></ol>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+
+            <article class="cartao" data-grafico="margem" aria-labelledby="t-margem">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-margem">Margem bruta por categoria</h3>
+                  <p class="cartao__sub" id="s-margem">Comparada à margem geral do período</p>
+                </div>
+                <button type="button" class="alternar" data-alvo="margem" aria-pressed="false"><span data-icone="tabela"></span><span>Tabela</span></button>
+              </header>
+              <div class="grafico"><canvas id="g-margem" role="img" aria-label="Margem bruta por categoria"></canvas></div>
+              <div class="tabela-alt" id="tab-margem" hidden></div>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Produtos -->
+        <section class="secao" id="produtos" aria-labelledby="t-secao-produtos">
+          <h2 class="secao__titulo" id="t-secao-produtos">Produtos</h2>
+          <div class="secao__grade secao__grade--2-1">
+            <article class="cartao" data-grafico="pareto" aria-labelledby="t-pareto">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-pareto">Curva ABC de produtos</h3>
+                  <p class="cartao__sub">Participação de cada produto (barras) e acumulado (linha), do maior para o menor faturamento</p>
+                </div>
+                <button type="button" class="alternar" data-alvo="pareto" aria-pressed="false"><span data-icone="tabela"></span><span>Tabela</span></button>
+              </header>
+              <ul class="legenda-abc" id="legenda-abc" aria-label="Resumo das classes ABC"></ul>
+              <div class="grafico grafico--alto"><canvas id="g-pareto" role="img" aria-label="Curva ABC de produtos"></canvas></div>
+              <div class="tabela-alt" id="tab-pareto" hidden></div>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+
+            <article class="cartao" aria-labelledby="t-rentaveis">
+              <header class="cartao__cab">
+                <div>
+                  <h3 class="cartao__titulo" id="t-rentaveis">Produtos mais rentáveis</h3>
+                  <p class="cartao__sub">Top 5 por lucro bruto, com a margem de cada um</p>
+                </div>
+              </header>
+              <ol class="lista-barras lista-barras--ranking" id="lista-rentaveis"></ol>
+              <p class="vazio" hidden>Sem vendas para os filtros selecionados.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Equipe -->
+        <section class="secao" id="equipe" aria-labelledby="t-secao-equipe">
+          <h2 class="secao__titulo" id="t-secao-equipe">Equipe comercial</h2>
+          <article class="cartao" aria-labelledby="t-vendedores">
+            <header class="cartao__cab">
+              <div>
+                <h3 class="cartao__titulo" id="t-vendedores">Ranking de vendedores</h3>
+                <p class="cartao__sub">Ordenado por faturamento no período. Nos dados fictícios, os pedidos foram distribuídos quase igualmente entre a equipe.</p>
+              </div>
+            </header>
+            <div class="tabela-rolagem">
+              <table class="tabela" id="tabela-vendedores">
+                <caption class="visualmente-oculto">Ranking de vendedores por faturamento</caption>
+                <thead>
+                  <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col">Vendedor</th>
+                    <th scope="col">Faturamento</th>
+                    <th scope="col" class="num">Lucro bruto</th>
+                    <th scope="col" class="num">Margem</th>
+                    <th scope="col" class="num">Pedidos</th>
+                    <th scope="col" class="num">Ticket médio</th>
+                    <th scope="col" class="num">Clientes</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <footer class="rodape">
+        <p><strong>Dados fictícios de portfólio.</strong> Clientes, vendedores e pedidos foram criados para demonstração. Os custos de produto vêm da base de desenvolvimento do autor.</p>
+        <p>Fonte: views analíticas do PostgreSQL (instância de testes), lidas por uma API local somente leitura. O navegador não acessa o banco de dados. <span id="rodape-ultima"></span></p>
+        <p>Projeto de portfólio de <strong>Thiago Miranda</strong> · Dados &amp; Business Intelligence.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
